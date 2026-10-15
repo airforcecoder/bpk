@@ -1,0 +1,84 @@
+/* Site wide baseline rules */
+
+@import "./variables.css";
+
+/* Global sizing rules that help to include padding+borders in the sizing */
+*, 
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Page styling, uses our variables so everyone has same colors and format*/
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background-color: var(--color-purple);
+  color: var(--color-white);
+}
+
+#root {
+    min-height: 100vh
+}
+
+/* Links inherit text color */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Components use the sites fonts */
+button, input, textarea, select { font: inherit;}
+
+button {cursor: pointer;}
+
+/* Overflow prevention for images */
+img {
+    display: block;
+    max-width: 100%;
+}
+
+/* SHared centered page layout */
+.page-container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding-left: var(--page-padding);
+    padding-right: var(--page-padding);
+}
+
+/* Shared button base */
+.btn {
+  display: inline-block;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: var(--space-sm) var(--space-lg);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+/* Main orange BPK button */
+.btn-primary {
+  background-color: var(--color-orange);
+  color: var(--color-black);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-orange-hover);
+}
+
+.btn-primary:active {
+  background-color: var(--color-orange-active);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
