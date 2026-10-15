@@ -52,3 +52,32 @@ img {
     padding-left: var(--page-padding);
     padding-right: var(--page-padding);
 }
+
+/* Shared button base */
+.btn {
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: var(--space-sm) var(--space-lg);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+/* Main orange BPK button */
+.btn-primary {
+  background-color: var(--color-orange);
+  color: var(--color-black);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-orange-hover);
+}
+
+.btn-primary:active {
+  background-color: var(--color-orange-active);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

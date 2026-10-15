@@ -2,6 +2,9 @@
    pages are functions --> return () --> main --> sections --> buttons, headers, components
 */
 
+/* THIS IMPORT WILL BASICALLY LIVE IN OUR NAV COMPONENT I PUT IT HERE FOR TEST PURPOSED TO SHOW GROUP*/
+import { Link } from 'react-router'
+
 /* Function initialization */
 function UITestPage() {
 
@@ -12,16 +15,77 @@ function UITestPage() {
     This is important for different sized devices to use page-container*/
     <main className="page-container">
 
-      {/* Section */}
-      <section>
+        {/* Visual button examples only */}
+  <section>
+    <h2>Button Style Examples</h2>
 
-        {/* Header example (default white)*/}
-        <h1>UI TEST DEFAULT COLOR</h1>
-        
-        {/* Header example (change color) */}
-        <h1 style ={{color:'black'}}> UI TEST COLOR CHANGE</h1>
+    <button className="btn btn-primary">
+      Primary Button
+    </button>
 
-      </section>
+    <button className="btn btn-primary" disabled>
+      Disabled Button
+    </button>
+
+  </section>
+
+
+  {/* Real routing examples */}
+  {/* Inline spacing is only for the UI test page.
+    Actual Navbar layout will be handled by the Navbar component. */}
+  <section>
+    <h2>Navigation Route Tests</h2>
+    <Link to="/" style={{ marginRight: '16px' }}>Home</Link>
+    <Link to="/menu" style={{ marginRight: '16px' }}>Menu</Link>
+    <Link to="/about" style={{ marginRight: '16px' }}>About</Link>
+    <Link to="/order" style={{ marginRight: '16px' }}>Order Online</Link>
+    <Link to="/cart">Cart</Link>
+
+  </section>
+
+  {/* Combined button + routing examples */}
+  <section>
+  <h2>Routing + Button Examples</h2>
+
+  <Link
+    to="/"
+    className="btn btn-primary"
+    style={{ marginRight: '16px' }}
+  >
+    Home
+  </Link>
+
+  <Link
+    to="/menu"
+    className="btn btn-primary"
+    style={{ marginRight: '16px' }}
+  >
+    Menu
+  </Link>
+
+  <Link
+    to="/about"
+    className="btn btn-primary"
+    style={{ marginRight: '16px' }}
+  >
+    About
+  </Link>
+
+  <Link
+    to="/order"
+    className="btn btn-primary"
+    style={{ marginRight: '16px' }}
+  >
+    Order Online
+  </Link>
+
+  <Link
+    to="/cart"
+    className="btn btn-primary"
+  >
+    Cart
+  </Link>
+</section>
 
       {/* End main */}
     </main>
