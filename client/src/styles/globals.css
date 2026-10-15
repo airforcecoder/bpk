@@ -1,0 +1,54 @@
+/* Site wide baseline rules */
+
+@import "./variables.css";
+
+/* Global sizing rules that help to include padding+borders in the sizing */
+*, 
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Page styling, uses our variables so everyone has same colors and format*/
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin:0;
+    min-width: 320px;
+    max-width: 100vh;
+    font-family: var(--font-body);
+    background-color: var(--color-purpkle);
+    color: var(--color-white);
+}
+
+#root {
+    min-height: 100vh
+}
+
+/* Links inherit text color */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Components use the sites fonts */
+button, input, textarea, select { font: inherit;}
+
+button {cursor: pointer;}
+
+/* Overflow prevention for images */
+img {
+    display: block;
+    max-width: 100%;
+}
+
+/* SHared centered page layout */
+.page-container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding-left: var(--page-padding);
+    padding-right: var(--page-padding);
+}

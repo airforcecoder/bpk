@@ -1,0 +1,52 @@
+/* CSS Custom Properties shared between all six team members for their pages.
+Contains: 1. Brand Colors
+          2. Spacing 
+          3. Border radius
+          4. Fonts
+          5. Animations
+This is so we stay consistent with all designing tokens of the front end.
+*/
+
+:root {
+
+/* Brand Colors */
+--color-yellow: #ffd400;
+--color-purple: #92278f;
+--color-darkpurple:#6b1d69;
+--color-orange:#eca000;
+--color-orange-hover:#dc9200;
+--color-orange-active: #c98200;
+--color-black:#000000;
+--color-white:#ffffff;
+
+/* Spacing */
+--space-xs: 4px;
+--space-sm: 8px;
+--space-med: 16px;
+--space-lg: 24px;
+--space-xl: 32px;
+--space-xxl: 48px;
+
+/* Border radiuses */
+--radius-sm: 4px;
+--radius-med: 8px;
+--radius-lg: 16px;
+--radius-pill: 9999px; /* This literally just makes it as round as possible, (its over 9000!!!)*/
+
+/* Layout */
+--container-size-max: 1200px;
+--page-padding: 16px;
+
+/* Text font */
+--font-body: Arial, san-serif;
+--font-display: "Arial Block", Arial, sans-serif;
+
+/* Animations */
+--transition-fast: 150ms ease;
+--transition: 250ms ease;
+
+
+
+
+}
+
