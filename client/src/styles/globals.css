@@ -19,7 +19,7 @@ body {
     min-width: 320px;
     max-width: 100vh;
     font-family: var(--font-body);
-    background-color: var(--color-purpkle);
+    background-color: var(--color-purple);
     color: var(--color-white);
 }
 
