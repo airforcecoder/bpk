@@ -55,6 +55,7 @@ img {
 
 /* Shared button base */
 .btn {
+  display: inline-block;
   border: none;
   border-radius: var(--radius-pill);
   padding: var(--space-sm) var(--space-lg);

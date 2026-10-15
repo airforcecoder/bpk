@@ -10,9 +10,8 @@ function UITestPage() {
 
   /* React returns the JSX that should be displayed */
   return (
-
-    /* Start main, WE USE THE CONTAINER I MADE SO THE WEBSITE USES THE SAME RESOLUTION/SIZE FOR ALL PAGES SEE THE EXAMPLE HERE 
-    This is important for different sized devices to use page-container*/
+    
+    /* page-container keeps content responsive, centered, consistently padded, and prevents excessive width on large screens */
     <main className="page-container">
 
         {/* Visual button examples only */}
