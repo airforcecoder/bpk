@@ -38,8 +38,8 @@ This is so we stay consistent with all designing tokens of the front end.
 --page-padding: 16px;
 
 /* Text font */
---font-body: Arial, san-serif;
---font-display: "Arial Block", Arial, sans-serif;
+--font-body: Arial, sans-serif;
+--font-display: "Arial Black", Arial, sans-serif;
 
 /* Animations */
 --transition-fast: 150ms ease;

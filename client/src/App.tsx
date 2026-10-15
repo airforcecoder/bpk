@@ -13,12 +13,12 @@ function App() {
     {/*This is where we route pages*/}
       <Routes>
         {/*We put it pages this format: path ="<what you want the URL to be in address bar>"" and element = {<function>}*/}
-        <Route path="/ui-test" element={<UITestPage />} />
         <Route path="/" element={<HomePage />} />
-        <Route path="menu" element={<MenuPage />} />
-        <Route path="order" element={<OrderPage />} />
-        <Route path="cart" element={<CartPage />} />
-        <Route path="about" element={<AboutPage />} />
+        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/order" element={<OrderPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/ui-test" element={<UITestPage />} />
       </Routes>
 
     </BrowserRouter>

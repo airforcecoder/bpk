@@ -15,12 +15,12 @@ html {
 }
 
 body {
-    margin:0;
-    min-width: 320px;
-    max-width: 100vh;
-    font-family: var(--font-body);
-    background-color: var(--color-purple);
-    color: var(--color-white);
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background-color: var(--color-purple);
+  color: var(--color-white);
 }
 
 #root {
