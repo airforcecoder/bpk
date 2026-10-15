@@ -34,7 +34,7 @@ This is so we stay consistent with all designing tokens of the front end.
 --radius-pill: 9999px; /* This literally just makes it as round as possible, (its over 9000!!!)*/
 
 /* Layout */
---container-size-max: 1200px;
+--container-max: 1200px;
 --page-padding: 16px;
 
 /* Text font */
