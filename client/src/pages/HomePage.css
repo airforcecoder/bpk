@@ -215,3 +215,48 @@
   margin: var(--space-sm) 0 0;
   font-size: 1rem;
 }
+
+/* Order Your Way */
+.home__order {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xxl) var(--space-lg);
+  background: var(--color-yellow);
+  color: var(--color-black);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-lg);
+}
+
+.home__order-title {
+  margin: 0;
+  color: var(--color-purple);
+}
+
+.home__order-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+}
+
+.home__order-option {
+  padding: 0 var(--space-lg);
+  text-align: center;
+}
+
+.home__order-option + .home__order-option {
+  border-left: 2px solid var(--color-black);
+}
+
+.home__order-option-title {
+  margin: 0 0 var(--space-xs);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--color-purple);
+  text-transform: uppercase;
+}
+
+.home__order-option-text {
+  margin: 0;
+}

@@ -47,6 +47,17 @@ const flavors: Flavor[] = [
   { name: 'Flavor Eight', category: 'Specials' },
 ]
 
+type OrderOption = {
+  title: string
+  text: string
+}
+
+const orderOptions: OrderOption[] = [
+  { title: 'Pickup', text: 'Placeholder, order ahead and grab it in store.' },
+  { title: 'Delivery', text: 'Placeholder, brought right to your door.' },
+  { title: 'Pre-order', text: 'Placeholder, plan ahead for big events.' },
+]
+
 const SLIDE_INTERVAL_MS = 5000
 
 function HomePage() {
@@ -167,7 +178,20 @@ function HomePage() {
 
       {/* Order Your Way */}
       <section className="page-container home__section">
-        <h2 className="home__section-title">Order Your Way</h2>
+        <div className="home__order">
+          <h2 className="home__section-title home__order-title">Order Your Way</h2>
+          <div className="home__order-options">
+            {orderOptions.map((option) => (
+              <div key={option.title} className="home__order-option">
+                <h3 className="home__order-option-title">{option.title}</h3>
+                <p className="home__order-option-text">{option.text}</p>
+              </div>
+            ))}
+          </div>
+          <Link to="/order" className="btn btn-primary home__btn">
+            Order Now
+          </Link>
+        </div>
       </section>
 
       {/* BPK-37: Business info (hours, location, social links) goes here */}
