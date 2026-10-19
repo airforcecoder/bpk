@@ -15,6 +15,17 @@ const slides: Slide[] = [
   { headline: 'Party Trays Available', text: 'Placeholder text about ordering for events.' },
 ]
 
+type Size = {
+  name: string
+  description: string
+}
+
+const sizes: Size[] = [
+  { name: 'Family Size', description: 'Placeholder, serves a crowd.' },
+  { name: 'Single Cup', description: 'Placeholder, one person treat.' },
+  { name: 'Mini Pack', description: 'Placeholder, bite-sized by the dozen.' },
+]
+
 const SLIDE_INTERVAL_MS = 5000
 
 function HomePage() {
@@ -92,6 +103,15 @@ function HomePage() {
       {/* Pick Your Size */}
       <section className="page-container home__section">
         <h2 className="home__section-title">Pick Your Size</h2>
+        <div className="home__sizes">
+          {sizes.map((size) => (
+            <article key={size.name} className="home__size-card">
+              <div className="home__placeholder home__size-image">Image</div>
+              <h3 className="home__size-name">{size.name}</h3>
+              <p className="home__size-text">{size.description}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
       {/* Our Flavors */}
