@@ -26,10 +26,35 @@ const sizes: Size[] = [
   { name: 'Mini Pack', description: 'Placeholder, bite-sized by the dozen.' },
 ]
 
+type FlavorCategory = 'Classic' | 'Seasonal' | 'Specials'
+type FlavorFilter = 'All' | FlavorCategory
+
+type Flavor = {
+  name: string
+  category: FlavorCategory
+}
+
+const flavorFilters: FlavorFilter[] = ['All', 'Classic', 'Seasonal', 'Specials']
+
+const flavors: Flavor[] = [
+  { name: 'Flavor One', category: 'Classic' },
+  { name: 'Flavor Two', category: 'Classic' },
+  { name: 'Flavor Three', category: 'Classic' },
+  { name: 'Flavor Four', category: 'Seasonal' },
+  { name: 'Flavor Five', category: 'Seasonal' },
+  { name: 'Flavor Six', category: 'Specials' },
+  { name: 'Flavor Seven', category: 'Specials' },
+  { name: 'Flavor Eight', category: 'Specials' },
+]
+
 const SLIDE_INTERVAL_MS = 5000
 
 function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0)
+  const [activeFilter, setActiveFilter] = useState<FlavorFilter>('All')
+
+  const visibleFlavors =
+    activeFilter === 'All' ? flavors : flavors.filter((flavor) => flavor.category === activeFilter)
 
   /* Auto-rotate, timer restarts whenever the slide changes so manual clicks get a full 5s */
   useEffect(() => {
@@ -117,6 +142,27 @@ function HomePage() {
       {/* Our Flavors */}
       <section className="page-container home__section">
         <h2 className="home__section-title">Our Flavors</h2>
+        <div className="home__pills">
+          {flavorFilters.map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              className={filter === activeFilter ? 'home__pill home__pill--active' : 'home__pill'}
+              aria-pressed={filter === activeFilter}
+              onClick={() => setActiveFilter(filter)}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+        <div className="home__flavors">
+          {visibleFlavors.map((flavor) => (
+            <article key={flavor.name} className="home__flavor-card">
+              <div className="home__placeholder home__flavor-image">Image</div>
+              <h3 className="home__flavor-name">{flavor.name}</h3>
+            </article>
+          ))}
+        </div>
       </section>
 
       {/* Order Your Way */}

@@ -166,3 +166,52 @@
 .home__size-text {
   margin: 0;
 }
+
+/* Our Flavors */
+.home__pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.home__pill {
+  border: 2px solid var(--color-black);
+  border-radius: var(--radius-pill);
+  padding: var(--space-xs) var(--space-med);
+  background: var(--color-white);
+  color: var(--color-black);
+  transition: background var(--transition-fast);
+}
+
+.home__pill:hover {
+  background: var(--color-yellow);
+}
+
+.home__pill--active,
+.home__pill--active:hover {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.home__flavors {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+.home__flavor-card {
+  text-align: center;
+}
+
+.home__flavor-image {
+  aspect-ratio: 1 / 1;
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-med);
+}
+
+.home__flavor-name {
+  margin: var(--space-sm) 0 0;
+  font-size: 1rem;
+}
