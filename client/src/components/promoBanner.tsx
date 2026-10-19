@@ -1,5 +1,5 @@
 import { promoBanner } from "../data/promoBanner";
-import "./PromoBanner.css";
+import "./promoBanner.css";
 
 export default function PromoBanner() {
   const { messages, separator, speedSeconds } = promoBanner;
