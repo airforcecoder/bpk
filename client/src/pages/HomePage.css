@@ -17,3 +17,124 @@
   color: var(--color-yellow);
   text-transform: uppercase;
 }
+
+/* Placeholder image box, swap for real <img> later */
+.home__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-darkpurple);
+  color: var(--color-white);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+}
+
+/* Shared button tweaks */
+.home__btn {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  padding: var(--space-med) var(--space-xl);
+}
+
+/* Hero carousel */
+.home__hero {
+  position: relative;
+  height: 60vh;
+  min-height: 360px;
+  overflow: hidden;
+  background: var(--color-black);
+  border-bottom: 3px solid var(--color-black);
+}
+
+.home__slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+}
+
+.home__slide--active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.home__slide-image {
+  height: 100%;
+}
+
+.home__slide-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-med);
+  padding: var(--space-xxl);
+  background: var(--color-yellow);
+  color: var(--color-black);
+}
+
+.home__slide-headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1.1;
+  color: var(--color-purple);
+  text-transform: uppercase;
+}
+
+.home__slide-text {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.home__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--color-black);
+  color: var(--color-white);
+  font-size: 1.75rem;
+  line-height: 1;
+  transition: background var(--transition-fast);
+}
+
+.home__arrow:hover {
+  background: var(--color-purple);
+}
+
+.home__arrow--prev {
+  left: var(--space-med);
+}
+
+.home__arrow--next {
+  right: var(--space-med);
+}
+
+.home__dots {
+  position: absolute;
+  bottom: var(--space-med);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.home__dot {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 2px solid var(--color-black);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+}
+
+.home__dot--active {
+  background: var(--color-orange);
+}
