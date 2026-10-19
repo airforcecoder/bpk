@@ -6,11 +6,10 @@ type BusinessInfo = {
   facebookUrl: string
 }
 
-// TODO(BPK-37): remove this fallback and import the shared object from '../data/businessInfo'
 const fallbackInfo: BusinessInfo = {
   name: 'Banana Pudding Krazy',
-  instagramUrl: 'https://www.instagram.com/',
-  facebookUrl: 'https://www.facebook.com/',
+  instagramUrl: 'https://www.instagram.com/bananapudding_krazy/?hl=en',
+  facebookUrl: 'https://www.facebook.com/Bananapuddingkrazy/',
 }
 
 type FooterProps = {
