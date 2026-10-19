@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router'
+
+import { HashRouter, Routes, Route } from 'react-router'
 import PublicLayout from './layouts/PublicLayout'
 
 import UITestPage from './pages/ui-test-page'
@@ -10,23 +11,19 @@ import AboutPage from './pages/AboutPage'
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
-          {/*This is where we route pages*/}
-            <Route element={<PublicLayout />}>
-              {/*We put it pages this format: path ="<what you want the URL to be in address bar>"" and element = {<function>}*/}
-              <Route path="/" element={<HomePage />} />
-              <Route path="/menu" element={<MenuPage />} />
-              <Route path="/order" element={<OrderPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/about" element={<AboutPage />} />
-            </Route>
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/menu" element={<MenuPage />} />
+          <Route path="/order" element={<OrderPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/about" element={<AboutPage />} />
+        </Route>
 
-            <Route path="/ui-test" element={<UITestPage />} />
-           
-
+        <Route path="/ui-test" element={<UITestPage />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
