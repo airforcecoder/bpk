@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import './HomePage.css'
+import PromoBanner from '../components/promoBanner'
 
 /* Placeholder data, swap with real content later */
 
@@ -81,6 +82,7 @@ function HomePage() {
   return (
     <main className="home">
       {/* BPK-36: Promo banner goes here */}
+      <PromoBanner />
 
       {/* Hero carousel */}
       <section className="home__hero" aria-roledescription="carousel">
