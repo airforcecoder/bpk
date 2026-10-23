@@ -2,12 +2,19 @@ import { useEffect, useState } from 'react'
 import ProductCard from '../components/ProductCard'
 import { getProducts } from '../services/productService'
 import type { Product } from '../data/mockProducts'
+
+ /* Ians modal code to pop out details */
+import ProductDetailsModal from '../components/ProductDetailsModal'
+
 import './MenuPage.css'
 
 function MenuPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
+
+   /* Ians modal code to pop out details */
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   useEffect(() => {
     let isCurrent = true
@@ -47,10 +54,25 @@ function MenuPage() {
       {!isLoading && !hasError && products.length > 0 && (
         <section className="menu-page__grid" aria-label="Menu products">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+
+              /* Ians modal code to pop out details */
+              onSelect={setSelectedProduct}
+            />
           ))}
         </section>
       )}
+
+
+       {/* Ians modal code to pop out details */}
+       {selectedProduct && (
+        <ProductDetailsModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+         />
+)}
     </main>
   )
 }

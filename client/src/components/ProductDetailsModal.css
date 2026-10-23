@@ -1,0 +1,47 @@
+.product-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: var(--space-med);
+}
+
+.product-modal {
+  background-color: var(--color-white);
+  color: var(--color-black);
+
+  width: 100%;
+  max-width: 650px;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.product-modal > button {
+  display: block;
+  margin-left: auto;
+
+  background-color: var(--color-orange);
+  color: var(--color-black);
+
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: var(--space-sm) var(--space-med);
+}
+
+.product-modal > button:hover {
+  background-color: var(--color-orange-hover);
+}
+
+#product-modal-title {
+  color: var(--color-purple);
+  font-family: var(--font-display);
+}
