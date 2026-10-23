@@ -196,3 +196,28 @@
   outline: 2px solid var(--color-purple);
   outline-offset: 2px;
 }
+
+/* CSS Styling for custimizations */
+.product-modal-customizations {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+
+  margin-top: var(--space-lg);
+  padding: var(--space-med);
+
+  border: 1px solid #ddd;
+  border-radius: var(--radius-med);
+}
+
+.product-modal-customizations legend {
+  font-weight: bold;
+  color: var(--color-purple);
+}
+
+.product-modal-customizations label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+}

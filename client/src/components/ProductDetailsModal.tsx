@@ -78,13 +78,20 @@ useEffect(() => {
     const [selectedSize, setSelectedSize] = useState(
         product.sizes?.[0]?.name ?? ''
     )
+    
+    /* Customer's selected customizations */
+    const [selectedCustomizations, setSelectedCustomizations] =
+    useState<string[]>([])
 
     /* Adding price calculation */
     const size = product.sizes?.find(
         (option) => option.name === selectedSize
     )
         const unitPrice = size?.price ?? product.price
-        const subtotal = unitPrice * quantity
+        const customizationTotal = (product.customizations ?? [])
+        .filter((option) => selectedCustomizations.includes(option.id))
+        .reduce((total, option) => total + option.price, 0)
+        const subtotal = (unitPrice + customizationTotal) * quantity
         const formatPrice = (price: number) => price.toLocaleString('en-US', 
         {
         style: 'currency',
@@ -182,6 +189,31 @@ useEffect(() => {
                         </fieldset>
                         )}
 
+                    {/* Product customizations */}
+                    {product.customizations && product.customizations.length > 0 && (
+                    <fieldset className="product-modal-customizations">
+                        <legend>Customizations</legend>
+
+                        {product.customizations.map((option) => (
+                        <label key={option.id}>
+                            <input
+                            type="checkbox"
+                            checked={selectedCustomizations.includes(option.id)}
+                            onChange={(e) => {
+                                setSelectedCustomizations((current) =>
+                                e.target.checked
+                                    ? [...current, option.id]
+                                    : current.filter((id) => id !== option.id)
+                                )
+                            }}
+                            />
+
+                            {option.name}
+                            {option.price > 0 && ` (+${formatPrice(option.price)})`}
+                        </label>
+                        ))}
+                    </fieldset>
+                    )}
                         {/* Customer special instructions */}
                         <div className="product-modal-notes">
                         <label htmlFor="product-notes">

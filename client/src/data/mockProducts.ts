@@ -7,11 +7,17 @@ export interface Product {
   price: number;
   imageRef: string;
   availability: ProductAvailability;
-  /* Added sizes to options */
+  /* Added size options */
   sizes?: {
-  name: string
-  price: number
-}[]
+    name: string
+    price: number
+  }[]
+  /* Optional product customizations */
+  customizations?: {
+    id: string
+    name: string
+    price: number
+  }[]
 }
 
 export const mockProducts: Product[] = [
@@ -24,6 +30,7 @@ export const mockProducts: Product[] = [
   imageRef: "/images/og-nilla.jpg",
   availability: "available",
 
+  /* How we add different sizes, prices to the modal */
   sizes: [
     { name: "Mini (8oz)", price: 8 },
     { name: "Selfie (16oz)", price: 15 },
@@ -33,6 +40,15 @@ export const mockProducts: Product[] = [
     { name: 'Party (9"x13" Pan)', price: 50 },
     { name: "Party Plus (Feeds 15-20)", price: 60 }
   ],
+
+  /* How we add customizations to the modal */
+  customizations: [
+  {
+    id: "no-banana",
+    name: "No Banana",
+    price: 0
+  }
+],
   },
   {
     id: "prod-002",
