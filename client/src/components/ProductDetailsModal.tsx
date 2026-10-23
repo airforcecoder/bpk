@@ -104,6 +104,7 @@ useEffect(() => {
     return(
         <div className = "product-modal-backdrop">
             <section
+                ref={modalRef}
                 className = "product-modal"
                 role = "dialog"
                 aria-modal = "true"
