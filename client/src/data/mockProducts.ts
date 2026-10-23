@@ -15,7 +15,7 @@ export interface Product {
 }
 
 export const mockProducts: Product[] = [
-  
+
   {
   id: "prod-001",
   name: "OG Nilla",
@@ -40,7 +40,7 @@ export const mockProducts: Product[] = [
     description: "Traditional pizza with tomato sauce, mozzarella, and fresh basil.",
     price: 12.5,
     imageRef: "/images/margherita-pizza.jpg",
-    availability: "available",
+    availability: "unavailable",
     sizes: [
   { name: 'Small', price: 12.50 },
   { name: 'Large', price: 18.50 }

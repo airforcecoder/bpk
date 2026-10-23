@@ -157,3 +157,16 @@
   font-weight: bold;
   color: var(--color-purple);
 }
+
+/* CSS Styling for availability and cart */
+.product-modal-availability {
+  margin-top: var(--space-med);
+  font-weight: bold;
+  color: var(--color-purple);
+}
+
+.product-modal-cart {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-med);
+}

@@ -134,6 +134,22 @@ function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
                       <strong>{formatPrice(subtotal)}</strong>
                     </div>
 
+                    {/* Product availability */}
+                    <p className="product-modal-availability">
+                    {product.availability === 'available'
+                        ? 'Available'
+                        : 'Sold Out'}
+                    </p>
+
+                    {/* Cart functionality will be implemented later */}
+                    <button
+                    type="button"
+                    className="btn btn-primary product-modal-cart"
+                    disabled
+                    >
+                    Add to Cart
+                    </button>
+
                 </section>
         </div>
     )
