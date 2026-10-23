@@ -20,9 +20,18 @@ function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
     const increaseQuantity = () => {setQuantity(quantity + 1)}
     const decreaseQuantity = () => {setQuantity(Math.max(1, quantity - 1))}
 
+    /* Add sizes */
+    const [selectedSize, setSelectedSize] = useState(
+        product.sizes?.[0]?.name ?? ''
+    )
+
     /* Adding price calculation */
-    const subtotal = product.price * quantity
-    const formatPrice = (price: number) => price.toLocaleString('en-US', 
+    const size = product.sizes?.find(
+        (option) => option.name === selectedSize
+    )
+        const unitPrice = size?.price ?? product.price
+        const subtotal = unitPrice * quantity
+        const formatPrice = (price: number) => price.toLocaleString('en-US', 
         {
         style: 'currency',
         currency: 'USD'
@@ -49,7 +58,7 @@ function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
                     <div className="product-modal-image">
                         {product.imageRef && !imageFailed ? (
                             <img
-                            src={`${import.meta.env.BASE_URL}${product.imageRef.replace(/^\//, '')}`}
+                            src={`${import.meta.env.BASE_URL}${product.imageRef.replace(/^\/+/, '')}`}
                             alt={product.name}
                             onError={() => setImageFailed(true)}
                             />
@@ -91,13 +100,39 @@ function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
                             +
                             </button>
                         </div>
-                        </div>
+                    </div>
 
-                        {/* Price section */}
-                        <div className="product-modal-subtotal">
-                            <strong>Subtotal:</strong>
-                            <strong>{formatPrice(subtotal)}</strong>
-                        </div>
+                    {/* Sizes */}
+                    {product.sizes && product.sizes.length > 0 && (
+                        <fieldset className="product-modal-sizes">
+                            <legend>Choose a Size</legend>
+
+                            {product.sizes.map((size) => (
+                            <label key={size.name}>
+                                <input
+                                type="radio"
+                                name="product-size"
+                                value={size.name}
+                                checked={selectedSize === size.name}
+                                onChange={() => setSelectedSize(size.name)}
+                                />
+
+                                {size.name} — {formatPrice(size.price)}
+                            </label>
+                            ))}
+                        </fieldset>
+                        )}
+
+                    {/* Price for the selected size */}
+                        <p className="product-modal-price">
+                        Unit Price: {formatPrice(unitPrice)}
+                        </p>
+
+                    {/* Price section */}
+                    <div className="product-modal-subtotal">
+                      <strong>Subtotal:</strong>
+                      <strong>{formatPrice(subtotal)}</strong>
+                    </div>
 
                 </section>
         </div>
