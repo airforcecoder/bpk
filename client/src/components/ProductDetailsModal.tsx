@@ -13,11 +13,23 @@ type ProductDetailsModalProps = {
 
 /* Our function to pop up details on page */
 function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
+    
 
     /* Adding quantity to the pop up modal */
     const [quantity, setQuantity] = useState(1)
     const increaseQuantity = () => {setQuantity(quantity + 1)}
     const decreaseQuantity = () => {setQuantity(Math.max(1, quantity - 1))}
+
+    /* Adding price calculation */
+    const subtotal = product.price * quantity
+    const formatPrice = (price: number) => price.toLocaleString('en-US', 
+        {
+        style: 'currency',
+        currency: 'USD'
+        })
+
+    /* Adding image to the pop up modal */
+    const [imageFailed, setImageFailed] = useState(false)
 
     return(
         <div className = "product-modal-backdrop">
@@ -32,6 +44,24 @@ function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
                     </button>
 
                     <h2 id= "product-modal-title"> {product.name}</h2>
+
+                    {/* Image for modal*/}
+                    <div className="product-modal-image">
+                        {product.imageRef && !imageFailed ? (
+                            <img
+                            src={`${import.meta.env.BASE_URL}${product.imageRef.replace(/^\//, '')}`}
+                            alt={product.name}
+                            onError={() => setImageFailed(true)}
+                            />
+                        ) : (
+                            <p>Image coming soon</p>
+                        )}
+                        </div>
+
+                        <p className="product-modal-description">
+                        {product.description || 'Description coming soon.'}
+                        </p>
+
                     <div className="product-modal-quantity">
 
                         {/*Modal quantity features */}
@@ -61,6 +91,12 @@ function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
                             +
                             </button>
                         </div>
+                        </div>
+
+                        {/* Price section */}
+                        <div className="product-modal-subtotal">
+                            <strong>Subtotal:</strong>
+                            <strong>{formatPrice(subtotal)}</strong>
                         </div>
 
                 </section>
