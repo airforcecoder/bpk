@@ -30,7 +30,7 @@ function ProductCard({ product, onSelect }: ProductCardProps) {
           ) : (
             <img
               className="product-card__image"
-              src={product.imageRef}
+              src={`${import.meta.env.BASE_URL}${product.imageRef.replace(/^\/+/, '')}`}
               alt={product.name}
               loading="lazy"
               onError={() => setImageFailed(true)}
