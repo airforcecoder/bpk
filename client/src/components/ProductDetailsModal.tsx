@@ -255,7 +255,9 @@ useEffect(() => {
                     className="btn btn-primary product-modal-cart"
                     disabled
                     >
-                    Add to Cart
+                    {product.availability === 'unavailable'
+                        ? 'Sold Out'
+                        : 'Add to Cart'}
                     </button>
 
                 </section>
