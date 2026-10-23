@@ -66,9 +66,15 @@ useEffect(() => {
     
 
     /* Adding quantity to the pop up modal */
+    /* Temporary quantity limit until confirmed with Kendra */
+    const MAX_QUANTITY = 10
     const [quantity, setQuantity] = useState(1)
-    const increaseQuantity = () => {setQuantity(quantity + 1)}
-    const decreaseQuantity = () => {setQuantity(Math.max(1, quantity - 1))}
+    const increaseQuantity = () => {
+    setQuantity((current) => Math.min(MAX_QUANTITY, current + 1))
+    }
+    const decreaseQuantity = () => {
+    setQuantity((current) => Math.max(1, current - 1))
+    }
 
     /* Add instructions */
     const [notes, setNotes] = useState('')
@@ -162,6 +168,7 @@ useEffect(() => {
                             <button
                             type="button"
                             onClick={increaseQuantity}
+                            disabled={quantity >= MAX_QUANTITY}
                             aria-label="Increase quantity"
                             >
                             +
