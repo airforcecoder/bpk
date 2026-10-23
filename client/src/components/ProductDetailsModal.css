@@ -170,3 +170,29 @@
   width: 100%;
   margin-top: var(--space-med);
 }
+
+/* CSS Styling special instructions */
+.product-modal-notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.product-modal-notes label {
+  font-weight: bold;
+  color: var(--color-purple);
+}
+
+.product-modal-notes textarea {
+  width: 100%;
+  padding: var(--space-med);
+  border: 1px solid #ccc;
+  border-radius: var(--radius-med);
+  resize: vertical;
+}
+
+.product-modal-notes textarea:focus-visible {
+  outline: 2px solid var(--color-purple);
+  outline-offset: 2px;
+}

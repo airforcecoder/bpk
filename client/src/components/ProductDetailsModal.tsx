@@ -70,6 +70,10 @@ useEffect(() => {
     const increaseQuantity = () => {setQuantity(quantity + 1)}
     const decreaseQuantity = () => {setQuantity(Math.max(1, quantity - 1))}
 
+    /* Add instructions */
+    const [notes, setNotes] = useState('')
+    
+
     /* Add sizes */
     const [selectedSize, setSelectedSize] = useState(
         product.sizes?.[0]?.name ?? ''
@@ -177,6 +181,22 @@ useEffect(() => {
                             ))}
                         </fieldset>
                         )}
+
+                        {/* Customer special instructions */}
+                        <div className="product-modal-notes">
+                        <label htmlFor="product-notes">
+                            Important Notes
+                        </label>
+
+                        <textarea
+                            id="product-notes"
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
+                            placeholder="Enter any special instructions..."
+                            maxLength={250}
+                            rows={3}
+                        />
+                        </div>
 
                     {/* Price for the selected size */}
                         <p className="product-modal-price">
