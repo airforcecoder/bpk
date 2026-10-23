@@ -1,6 +1,8 @@
 /* Import mock products */
 import type { Product } from '../data/mockProducts'
-import { useState } from 'react'
+
+/* Updated import for keyboard support */
+import { useEffect, useRef, useState } from 'react'
 
 /* Import styling for the modal */
 import './ProductDetailsModal.css'
@@ -13,6 +15,54 @@ type ProductDetailsModalProps = {
 
 /* Our function to pop up details on page */
 function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
+
+
+/* Modal keyboard accessibility */
+const modalRef = useRef<HTMLElement>(null)
+const closeButtonRef = useRef<HTMLButtonElement>(null)
+useEffect(() => {
+  const previousFocus = document.activeElement
+  // Focus the Close button when the modal opens
+  closeButtonRef.current?.focus()
+  const handleKeyDown = (event: KeyboardEvent) => {
+    // Close the modal with Escape
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      onClose()
+      return
+    }
+    // Keep Tab navigation inside the modal
+    if (event.key !== 'Tab') return
+        const focusable = modalRef.current?.querySelectorAll<HTMLElement>(
+        'button:not(:disabled), input:not(:disabled), textarea:not(:disabled), a[href]'
+        )
+        if (!focusable || focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (!modalRef.current?.contains(document.activeElement)) {
+        event.preventDefault()
+        if (event.shiftKey) {
+            last.focus()
+        } else {
+            first.focus()
+        }
+        } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+        }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+        document.removeEventListener('keydown', handleKeyDown)
+        // Return focus to the Product Card when the modal closes
+        if (previousFocus instanceof HTMLElement) {
+        previousFocus.focus()
+        }
+    }
+    }, [onClose])
     
 
     /* Adding quantity to the pop up modal */
@@ -48,8 +98,13 @@ function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
                 aria-modal = "true"
                 aria-labelledby = "product-modal-title"
                 >
-                    <button type = "button" onClick = {onClose}>
-                        Close
+                    {/* Button updated for close with keyboard behavior */}
+                    <button
+                    ref={closeButtonRef}
+                    type="button"
+                    onClick={onClose}
+                    >
+                    Close
                     </button>
 
                     <h2 id= "product-modal-title"> {product.name}</h2>
