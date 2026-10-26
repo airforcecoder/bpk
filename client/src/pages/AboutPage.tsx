@@ -1,68 +1,92 @@
+import { useState } from "react";
+import "./AboutPage.css";
+import { aboutContent } from "../data/aboutPgBPK";
+
+function GalleryImage({
+    src,
+    alt
+}: {
+    src?: string;
+    alt: string;
+}) {
+    const [imageFailed, setImageFailed] = useState(false);
+    const imageSrc = src?.trim();
+
+    if (!imageSrc || imageFailed) {
+        return (
+            <div className="about-gallery__placeholder" aria-label="No image">
+                No image
+            </div>
+        );
+    }
+
+    return (
+        <img
+            className="about-gallery__image"
+            src={`${import.meta.env.BASE_URL}${imageSrc.replace(/^\/+/, "")}`}
+            alt={alt}
+            loading="lazy"
+            onError={() => setImageFailed(true)}
+        />
+    );
+}
+
+
 function AboutPage() {
     return (
         <main className="page-container about-page">
             <section className="about-section">
-                <h1 className="about-title">About Banana Pudding Krazy</h1>
+                <div className="about-content">
+                    <h1 className="about-title">{aboutContent.title}</h1>
 
-                <p className="about-description">
-                    Welcome to Banana Pudding Krazy, where every bite is a celebration of comfort, 
-                    joy and nostalgia. Our journey began with a simple moment: a friend's pregnancy
-                    craving for banana pudding. That request sparked a passion that quickly turned into a business, 
-                    sharing our uniquely delicious puddings with pudding lovers everywhere. 
-                    At Banana Pudding Krazy, we’re on a mission to make connections through our unforgettable 
-                    flavors and bring joy to all. We take a classic favorite and add our own unique twist, creating bold, 
-                    exciting flavor combinations that keep our customers coming back for more. From our signature 3 x Krazy to the 
-                    timeless OG Nilla and seasonal favorites like 'Pumpkin Pie Cheesecake and Egg Noggie Nog, we pour love, creativity 
-                    and as many local ingredients as we can into every flavor. Thanks a BUNCH for supporting our small business and
-                    joining us on this sweet journey. Whether you're reminiscing about family gatherings or looking for a new flavor experience,
-                    Banana Pudding Krazy has something special for you!
-                </p>
+                    <div className="about-description">
+                        {aboutContent.paragraphs.map((paragraph, index) => (
+                            <p key={index}>{paragraph}</p>
+                        ))}
+                    </div>
 
-                <div className="business-info">
-                    <h2>Business Information</h2>
-                    <p><strong>Location:</strong> South Sacramento, CA</p>
-                    <p><strong>Email:</strong> Bananapuddingkrazy@gmail.com</p>
-                    <p><strong>Phone:</strong> (916) 893‑4132</p>
+                    <div className="about-gallery">
+                        {aboutContent.gallery.map((image) => (
+                            <GalleryImage
+                                key={image.src}
+                                src={image.src}
+                                alt={image.alt}
+                            />
+                        ))}
+                    </div>
+                    
+                    <div className="business-info">
+                        <h2>{aboutContent.businessInfo.heading}</h2>
+
+                        <p>
+                            <strong>{aboutContent.businessInfo.labels.location}:</strong>{" "}
+                            {aboutContent.businessInfo.values.location}
+                        </p>
+
+                        <p>
+                            <strong>{aboutContent.businessInfo.labels.email}:</strong>{" "}
+                            {aboutContent.businessInfo.values.email}
+                        </p>
+
+                        <p>
+                            <strong>{aboutContent.businessInfo.labels.phone}:</strong>{" "}
+                            {aboutContent.businessInfo.values.phone}
+                        </p>
+                    </div>
+
+                    <div className="social-links">
+                        <h2>{aboutContent.socialLinks.heading}</h2>
+
+                        <ul>
+                            {aboutContent.socialLinks.links.map((social) => (
+                                <li key={social.name}>
+                                    <a href={social.href}>{social.name}</a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
 
-                <div className="social-links">
-                    <h2>Follow Us</h2>
-                    <ul>
-                        <li>
-                            <a
-                                href="https://www.facebook.com/Bananapuddingkrazy/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn btn-primary"
-                                style={{ marginBottom: "var(--space-sm)" }}
-                            >
-                                Facebook
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://www.instagram.com/bananapudding_krazy/?hl=en"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn btn-primary"
-                                style={{ marginBottom: "var(--space-sm)" }}
-                            >
-                                Instagram
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://www.tiktok.com/@banana.pudding.krazy"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn btn-primary"
-                                style={{ marginBottom: "var(--space-sm)" }}
-                            >
-                                TikTok
-                            </a>
-                        </li>
-                    </ul>
-                </div>
             </section>
         </main>
     );
