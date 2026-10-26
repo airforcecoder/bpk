@@ -14,9 +14,12 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
 
 function ProductCard({ product, onSelect }: ProductCardProps) {
   const [imageFailed, setImageFailed] = useState(false)
+  const isUnavailable = product.availability === 'unavailable'
 
   return (
-    <article className="product-card">
+    <article
+      className={isUnavailable ? 'product-card product-card--unavailable' : 'product-card'}
+    >
       <button
         type="button"
         className="product-card__button"
@@ -36,6 +39,8 @@ function ProductCard({ product, onSelect }: ProductCardProps) {
               onError={() => setImageFailed(true)}
             />
           )}
+
+          {isUnavailable && <span className="product-card__badge">Sold out</span>}
         </span>
 
         <span className="product-card__body">
