@@ -2,10 +2,7 @@ export const aboutContent = {
     title: "About Banana Pudding Krazy",
 
     paragraphs: [
-        `Welcome to Banana Pudding Krazy, where every bite is a celebration of comfort, joy and nostalgia. 
-        Our journey began with a simple moment: a friend's pregnancy craving for banana pudding. 
-        That request sparked a passion that quickly turned into a business, sharing our uniquely delicious puddings with pudding lovers everywhere. 
-        At Banana Pudding Krazy, we’re on a mission to make connections through our unforgettable flavors and bring joy to all.`
+        `Welcome to Banana Pudding Krazy, where every bite is a celebration of comfort, joy and nostalgia. Our journey began with a simple moment: a friend's pregnancy craving for banana pudding. That request sparked a passion that quickly turned into a business, sharing our uniquely delicious puddings with pudding lovers everywhere. At Banana Pudding Krazy, we’re on a mission to make connections through our unforgettable flavors and bring joy to all. We take a classic favorite and add our own unique twist, creating bold, exciting flavor combinations that keep our customers coming back for more. From our signature 3 x Krazy to the timeless OG Nilla and seasonal favorites like 'Pumpkin Pie Cheesecake and Egg Noggie Nog, we pour love, creativity and as many local ingredients as we can into every flavor. Thanks a BUNCH for supporting our small business and joining us on this sweet journey. Whether you're reminiscing about family gatherings or looking for a new flavor experience, Banana Pudding Krazy has something special for you!`
     ],
 
     gallery: [
