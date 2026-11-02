@@ -53,10 +53,11 @@ type OrderOption = {
   text: string
 }
 
+/* BPK-116: Banana Pudding Krazy is pickup only, no delivery */
 const orderOptions: OrderOption[] = [
-  { title: 'Pickup', text: 'Placeholder, order ahead and grab it in store.' },
-  { title: 'Delivery', text: 'Placeholder, brought right to your door.' },
-  { title: 'Pre-order', text: 'Placeholder, plan ahead for big events.' },
+  { title: 'Order Ahead', text: 'Choose your flavors and sizes online before you head over.' },
+  { title: 'Pick Up', text: 'Pickup only. Grab your order at your chosen pickup time.' },
+  { title: 'Party Orders', text: 'Ordering for an event? Plan ahead with party pans and cups.' },
 ]
 
 const SLIDE_INTERVAL_MS = 5000
@@ -178,10 +179,10 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Order Your Way */}
+      {/* Order for Pickup */}
       <section className="page-container home__section">
         <div className="home__order">
-          <h2 className="home__section-title home__order-title">Order Your Way</h2>
+          <h2 className="home__section-title home__order-title">Order for Pickup</h2>
           <div className="home__order-options">
             {orderOptions.map((option) => (
               <div key={option.title} className="home__order-option">
