@@ -3,7 +3,8 @@ import { Link } from 'react-router'
 import './HomePage.css'
 import PromoBanner from '../components/promoBanner'
 
-/* Placeholder data, swap with real content later */
+/* BPK-117: Home page content. Sizes and prices match mockProducts.ts, promos match promoBanner.ts.
+   OG Nilla is the only confirmed flavor so far, other flavors show as Coming Soon until Kendra approves them. */
 
 type Slide = {
   headline: string
@@ -11,9 +12,9 @@ type Slide = {
 }
 
 const slides: Slide[] = [
-  { headline: 'Fresh Pudding Daily', text: 'Placeholder text about our classic banana pudding.' },
-  { headline: 'Seasonal Flavor Here', text: 'Placeholder text about a limited time flavor.' },
-  { headline: 'Party Trays Available', text: 'Placeholder text about ordering for events.' },
+  { headline: 'Meet OG Nilla', text: 'Our classic banana pudding, made the original way.' },
+  { headline: '$10 Tuesdays', text: 'Swing by on Tuesdays for our $10 deal, and get $4 off selfies.' },
+  { headline: 'Party Pans Available', text: 'Feeding a crowd? Party pans and 3oz party cups are ready to order.' },
 ]
 
 type Size = {
@@ -22,9 +23,9 @@ type Size = {
 }
 
 const sizes: Size[] = [
-  { name: 'Family Size', description: 'Placeholder, serves a crowd.' },
-  { name: 'Single Cup', description: 'Placeholder, one person treat.' },
-  { name: 'Mini Pack', description: 'Placeholder, bite-sized by the dozen.' },
+  { name: 'Mini & Selfie', description: '8oz and 16oz cups, starting at $8.' },
+  { name: 'Party Cups', description: 'A dozen 3oz cups for $36.' },
+  { name: 'Pans', description: 'Usie, Family, Party and Party Plus pans, from $30.' },
 ]
 
 type FlavorCategory = 'Classic' | 'Seasonal' | 'Specials'
@@ -33,19 +34,17 @@ type FlavorFilter = 'All' | FlavorCategory
 type Flavor = {
   name: string
   category: FlavorCategory
+  comingSoon?: boolean
 }
 
 const flavorFilters: FlavorFilter[] = ['All', 'Classic', 'Seasonal', 'Specials']
 
+/* comingSoon = temporary card, replace once the real flavor is approved */
 const flavors: Flavor[] = [
-  { name: 'Flavor One', category: 'Classic' },
-  { name: 'Flavor Two', category: 'Classic' },
-  { name: 'Flavor Three', category: 'Classic' },
-  { name: 'Flavor Four', category: 'Seasonal' },
-  { name: 'Flavor Five', category: 'Seasonal' },
-  { name: 'Flavor Six', category: 'Specials' },
-  { name: 'Flavor Seven', category: 'Specials' },
-  { name: 'Flavor Eight', category: 'Specials' },
+  { name: 'OG Nilla', category: 'Classic' },
+  { name: 'Coming Soon', category: 'Classic', comingSoon: true },
+  { name: 'Coming Soon', category: 'Seasonal', comingSoon: true },
+  { name: 'Coming Soon', category: 'Specials', comingSoon: true },
 ]
 
 type OrderOption = {
@@ -170,9 +169,11 @@ function HomePage() {
           ))}
         </div>
         <div className="home__flavors">
-          {visibleFlavors.map((flavor) => (
-            <article key={flavor.name} className="home__flavor-card">
-              <div className="home__placeholder home__flavor-image">Image</div>
+          {visibleFlavors.map((flavor, index) => (
+            <article key={`${flavor.category}-${index}`} className="home__flavor-card">
+              <div className="home__placeholder home__flavor-image">
+                {flavor.comingSoon ? 'More flavors coming' : 'Image'}
+              </div>
               <h3 className="home__flavor-name">{flavor.name}</h3>
             </article>
           ))}
