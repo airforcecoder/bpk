@@ -8,6 +8,7 @@ import MenuPage from './pages/MenuPage'
 import OrderPage from './pages/OrderPage'
 import CartPage from './pages/CartPage'
 import AboutPage from './pages/AboutPage'
+import AdminLoginPage from './pages/AdminLoginPage'
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           <Route path="/order" element={<OrderPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />}
+        />
         </Route>
 
         <Route path="/ui-test" element={<UITestPage />} />
