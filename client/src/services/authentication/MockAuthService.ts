@@ -13,21 +13,18 @@ export class MockAuthService implements LoginService {
     );
 
     if (
-      !credentials.usernameOrEmail.trim() ||
-      !credentials.password
-    ) {
-      return {
-        success: false,
-        message: "Please provide all required fields.",
-      };
-    }
+  credentials.usernameOrEmail === "admin" &&
+  credentials.password === "password123"
+) {
+  return {
+    success: true,
+    message: "Demo login successful.",
+  };
+}
 
-    // Demonstration only.
-    // No real authentication or authorization occurs.
-    return {
-      success: false,
-      message:
-        "Demo mode: Authentication is not configured. No admin access was granted.",
+return {
+    success: false,
+    message: "Demo login failed. This is a UI-only implementation.",
     };
   }
 }

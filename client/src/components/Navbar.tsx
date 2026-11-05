@@ -13,7 +13,6 @@ const navItems: NavItem[] = [
   { label: 'Menu', path: '/menu' },
   { label: 'About', path: '/about' },
   { label: 'Cart', path: '/cart' },
-  { label: 'Login', path: '/admin/login' },
 ]
 
 function Navbar() {

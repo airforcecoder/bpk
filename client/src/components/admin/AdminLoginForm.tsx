@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 import type { LoginService } from "../../services/authentication/auth.interface";
 
@@ -32,6 +33,8 @@ export default function AdminLoginForm({
 
   const [success, setSuccess] = useState(false);
 
+  const navigate = useNavigate();
+
   async function handleSubmit(
     event: React.FormEvent<HTMLFormElement>
   ) {
@@ -62,6 +65,11 @@ export default function AdminLoginForm({
 
       setSuccess(result.success);
       setMessage(result.message);
+
+      if (result.success) {
+        navigate("/admin/dashboard");
+      }
+
     } catch {
       setSuccess(false);
       setMessage(
@@ -86,8 +94,17 @@ export default function AdminLoginForm({
         </div>
 
         <div className="demo-notice" role="note">
-          Demonstration only. This login does not
-          provide real administrator access.
+            Demonstration only.
+
+        <br />
+
+          Username: <strong>admin</strong>
+        <br />
+          Password: <strong>password123</strong>
+
+        <br /><br />
+
+          No real authentication or administrator access is provided.
         </div>
 
         <form onSubmit={handleSubmit} noValidate>
