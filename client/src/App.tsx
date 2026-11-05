@@ -8,6 +8,7 @@ import MenuPage from './pages/MenuPage'
 import OrderPage from './pages/OrderPage'
 import CartPage from './pages/CartPage'
 import AboutPage from './pages/AboutPage'
+import AdminDashboardPage from './pages/AdminDashboardPage'
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
         </Route>
 
         <Route path="/ui-test" element={<UITestPage />} />
+        <Route path="/ui-test" element={<UITestPage />} />
+        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
       </Routes>
     </HashRouter>
   )
