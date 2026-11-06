@@ -139,11 +139,13 @@
   background: var(--color-orange);
 }
 
-/* Pick Your Size */
+/* Replaced pick your size with krazy good stuff on homepage */
 .home__sizes {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-lg);
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .home__size-card {
@@ -151,9 +153,13 @@
 }
 
 .home__size-image {
+  display: block;
+  width: 100%;
   aspect-ratio: 1 / 1;
+  object-fit: cover;
   border: 3px solid var(--color-black);
   border-radius: var(--radius-lg);
+  box-sizing: border-box;
 }
 
 .home__size-name {
@@ -341,4 +347,30 @@
   .home__btn {
     padding: var(--space-sm) var(--space-lg);
   }
+
+  /* Krazy good stuff section */
+.home__feature-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--color-yellow);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: var(--space-med);
 }
+
+.home__feature-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  text-align: center;
+  margin: var(--space-med) 0 var(--space-xs);
+}
+
+.home__feature-description {
+  text-align: center;
+  margin: 0;
+}
+
+}
+
+

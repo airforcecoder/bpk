@@ -17,15 +17,33 @@ const slides: Slide[] = [
   { headline: 'Party Pans Available', text: 'Feeding a crowd? Party pans and 3oz party cups are ready to order.' },
 ]
 
-type Size = {
+// Removed sizes to add a two column monthly feature section
+type MonthlyFeature = {
+  title: string
   name: string
   description: string
+  image: string
 }
 
-const sizes: Size[] = [
-  { name: 'Mini & Selfie', description: '8oz and 16oz cups, starting at $8.' },
-  { name: 'Party Cups', description: 'A dozen 3oz cups for $36.' },
-  { name: 'Pans', description: 'Usie, Family, Party and Party Plus pans, from $30.' },
+// Our columns
+const monthlyFeatures: MonthlyFeature[] = [
+
+  // Flavoor of the month
+  { 
+    title: 'Flavor of the Month',
+    name: 'OG Nilla', 
+    description: 'Our classic banana pudding, made the original way.',
+    image: '/images/og-nilla.jpg'
+   },
+
+  // Item of the month
+  { 
+    title: 'Item of the Month',
+    name: 'Oreo banana pudding', 
+    description: 'Krazy good, oreos, pudding, banana, oreos ITS GREAT',
+    image: '/images/oreo-pudding.jpg'
+  },
+
 ]
 
 type FlavorCategory = 'Classic' | 'Seasonal' | 'Specials'
@@ -138,15 +156,25 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Pick Your Size */}
+      {/* Removed pick your size section, added Krazy good stuff section */}
       <section className="page-container home__section">
-        <h2 className="home__section-title">Pick Your Size</h2>
+        <h2 className="home__section-title">Krazy Good Stuff</h2>
         <div className="home__sizes">
-          {sizes.map((size) => (
-            <article key={size.name} className="home__size-card">
-              <div className="home__placeholder home__size-image">Image</div>
-              <h3 className="home__size-name">{size.name}</h3>
-              <p className="home__size-text">{size.description}</p>
+          {monthlyFeatures.map((feature) => (
+            <article key={feature.name} className="home__size-card">
+              {/* ColumnHeader placement */}
+              <h3 className="home__feature-title">
+                {feature.title}
+              </h3>
+                {/* Image placement */}
+              <img
+                className="home__size-image"
+                src={`${import.meta.env.BASE_URL}${feature.image.replace(/^\/+/, '')}`}
+                alt={feature.name}
+                loading="lazy"
+              />
+              <h3 className="home__feature-name">{feature.name}</h3>
+              <p className="home__feature-description">{feature.description}</p>
             </article>
           ))}
         </div>
