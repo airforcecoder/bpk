@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router'
 import './Footer.css'
 
 type BusinessInfo = {
@@ -41,6 +42,12 @@ function Footer({ info = fallbackInfo }: FooterProps) {
           >
             Facebook
           </a>
+          <NavLink
+            to="/admin/login"
+            className="footer__link"
+          >
+          Admin Login
+          </NavLink>
         </nav>
 
         <p className="footer__copy">
