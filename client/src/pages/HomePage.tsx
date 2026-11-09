@@ -46,25 +46,6 @@ const monthlyFeatures: MonthlyFeature[] = [
 
 ]
 
-type FlavorCategory = 'Classic' | 'Seasonal' | 'Specials'
-type FlavorFilter = 'All' | FlavorCategory
-
-type Flavor = {
-  name: string
-  category: FlavorCategory
-  comingSoon?: boolean
-}
-
-const flavorFilters: FlavorFilter[] = ['All', 'Classic', 'Seasonal', 'Specials']
-
-/* comingSoon = temporary card, replace once the real flavor is approved */
-const flavors: Flavor[] = [
-  { name: 'OG Nilla', category: 'Classic' },
-  { name: 'Coming Soon', category: 'Classic', comingSoon: true },
-  { name: 'Coming Soon', category: 'Seasonal', comingSoon: true },
-  { name: 'Coming Soon', category: 'Specials', comingSoon: true },
-]
-
 type OrderOption = {
   title: string
   text: string
@@ -81,10 +62,6 @@ const SLIDE_INTERVAL_MS = 5000
 
 function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0)
-  const [activeFilter, setActiveFilter] = useState<FlavorFilter>('All')
-
-  const visibleFlavors =
-    activeFilter === 'All' ? flavors : flavors.filter((flavor) => flavor.category === activeFilter)
 
   /* Auto-rotate, timer restarts whenever the slide changes so manual clicks get a full 5s */
   useEffect(() => {
@@ -180,34 +157,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Our Flavors */}
-      <section className="page-container home__section">
-        <h2 className="home__section-title">Our Flavors</h2>
-        <div className="home__pills">
-          {flavorFilters.map((filter) => (
-            <button
-              key={filter}
-              type="button"
-              className={filter === activeFilter ? 'home__pill home__pill--active' : 'home__pill'}
-              aria-pressed={filter === activeFilter}
-              onClick={() => setActiveFilter(filter)}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-        <div className="home__flavors">
-          {visibleFlavors.map((flavor, index) => (
-            <article key={`${flavor.category}-${index}`} className="home__flavor-card">
-              <div className="home__placeholder home__flavor-image">
-                {flavor.comingSoon ? 'More flavors coming' : 'Image'}
-              </div>
-              <h3 className="home__flavor-name">{flavor.name}</h3>
-            </article>
-          ))}
-        </div>
-      </section>
-
+      
       {/* Order for Pickup */}
       <section className="page-container home__section">
         <div className="home__order">
