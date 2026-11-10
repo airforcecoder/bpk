@@ -316,3 +316,71 @@
   text-align: center;
   margin: 0;
 }
+
+/* Homepage product menu */
+/* BPK-100: Homepage menu carousel */
+.home__menu-hero {
+  height: 500px;
+  min-height: 500px;
+  margin: 0 auto;
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-lg);
+}
+
+.home__menu-hero .home__slide-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: cover;
+}
+
+.home__menu-hero .home__arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .home__menu-hero {
+    height: 600px;
+    min-height: 600px;
+  }
+
+  .home__menu-hero .home__slide {
+    grid-template-rows: 45% 55%;
+  }
+
+  .home__menu-hero .home__slide-content {
+    padding: var(--space-lg);
+  }
+
+  .home__menu-hero .home__arrow {
+    top: 25%;
+  }
+}
+
+.home__menu-arrow:hover:not(:disabled) {
+  background: var(--color-purple);
+}
+
+.home__menu-arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.home__menu-counter {
+  text-align: center;
+  margin-top: var(--space-med);
+}
+
+@media (max-width: 480px) {
+  .home__menu-carousel {
+    gap: var(--space-xs);
+  }
+
+  .home__menu-arrow {
+    width: 36px;
+    height: 36px;
+  }
+}

@@ -3,19 +3,17 @@ import { Link } from 'react-router'
 import './HomePage.css'
 import PromoBanner from '../components/promoBanner'
 
+/* BPK-100 imports for homepage menu slideshow display  */
+import ProductDetailsModal from '../components/ProductDetailsModal'
+import {getProducts} from '../services/productService'
+import type { Product } from '../data/mockProducts'
+
+
+
 /* BPK-117: Home page content. Sizes and prices match mockProducts.ts, promos match promoBanner.ts.
    OG Nilla is the only confirmed flavor so far, other flavors show as Coming Soon until Kendra approves them. */
 
-type Slide = {
-  headline: string
-  text: string
-}
-
-const slides: Slide[] = [
-  { headline: 'Meet OG Nilla', text: 'Our classic banana pudding, made the original way.' },
-  { headline: '$10 Tuesdays', text: 'Swing by on Tuesdays for our $10 deal, and get $4 off selfies.' },
-  { headline: 'Party Pans Available', text: 'Feeding a crowd? Party pans and 3oz party cups are ready to order.' },
-]
+/* Removed old carousel slides to add a new homepage hero carousel with updated content */
 
 // Removed sizes to add a two column monthly feature section
 type MonthlyFeature = {
@@ -58,79 +56,125 @@ const orderOptions: OrderOption[] = [
   { title: 'Party Orders', text: 'Ordering for an event? Plan ahead with party pans and cups.' },
 ]
 
-const SLIDE_INTERVAL_MS = 5000
+/* removed old slide variables for new homepage hero carousel with updated content */
 
 function HomePage() {
-  const [activeSlide, setActiveSlide] = useState(0)
+/* removed old slide state for new homepage hero carousel with updated content */
 
-  /* Auto-rotate, timer restarts whenever the slide changes so manual clicks get a full 5s */
+  /* BPK-100: Homepage menu slideshow display. Fetch products from productService and display them in a carousel. */
+  const [products, setProducts] = useState<Product[]>([])
+  const [featuredIndex, setFeaturedIndex] = useState(0)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [productLoading, setProductLoading] = useState(true)
+  const [productError, setProductError] = useState(false)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setActiveSlide((current) => (current + 1) % slides.length)
-    }, SLIDE_INTERVAL_MS)
-    return () => clearTimeout(timer)
-  }, [activeSlide])
+    let isCurrent = true
+    getProducts()
+      .then((data) => {
+        if (isCurrent) {setProducts(data)}
+      })
+      .catch(() => {
+        if (isCurrent) {setProductError(true)}
+      })
+      .finally(() => {
+        if (isCurrent) {setProductLoading(false)}
+      })
 
-  const prevSlide = () => setActiveSlide((activeSlide - 1 + slides.length) % slides.length)
-  const nextSlide = () => setActiveSlide((activeSlide + 1) % slides.length)
+      return () => {
+        isCurrent = false
+      } 
+  }, [])
+
 
   return (
     <main className="home">
       {/* BPK-36: Promo banner goes here */}
       <PromoBanner />
 
-      {/* Hero carousel */}
-      <section className="home__hero" aria-roledescription="carousel">
-        {slides.map((slide, index) => (
-          <div
-            key={slide.headline}
-            className={index === activeSlide ? 'home__slide home__slide--active' : 'home__slide'}
-            aria-hidden={index !== activeSlide}
-          >
-            <div className="home__placeholder home__slide-image">Image</div>
-            <div className="home__slide-content">
-              <h1 className="home__slide-headline">{slide.headline}</h1>
-              <p className="home__slide-text">{slide.text}</p>
-              <Link
-                to="/order"
-                className="btn btn-primary home__btn"
-                tabIndex={index === activeSlide ? 0 : -1}
-              >
-                Order Now
-              </Link>
-            </div>
-          </div>
-        ))}
+     {/* BPK-100: Homepage menu slideshow */}
+      <section className="page-container home__section">
+        <h2 className="home__section-title">Menu</h2>
 
-        <button
-          type="button"
-          className="home__arrow home__arrow--prev"
-          aria-label="Previous slide"
-          onClick={prevSlide}
-        >
-          ‹
-        </button>
-        <button
-          type="button"
-          className="home__arrow home__arrow--next"
-          aria-label="Next slide"
-          onClick={nextSlide}
-        >
-          ›
-        </button>
+        {productLoading && <p>Loading products...</p>}
 
-        <div className="home__dots">
-          {slides.map((slide, index) => (
-            <button
-              key={slide.headline}
-              type="button"
-              className={index === activeSlide ? 'home__dot home__dot--active' : 'home__dot'}
-              aria-label={`Go to slide ${index + 1}`}
-              aria-current={index === activeSlide}
-              onClick={() => setActiveSlide(index)}
-            />
-          ))}
-        </div>
+        {productError && (
+          <p>Error loading products. Please try again later.</p>
+        )}
+
+        {!productLoading && !productError && products.length === 0 && (
+          <p>No products available.</p>
+        )}
+
+        {!productLoading && !productError && products.length > 0 && (
+        
+        <div className="home__hero home__menu-hero">
+  <div className="home__slide home__slide--active">
+
+    <img
+      className="home__slide-image"
+      src={`${import.meta.env.BASE_URL}${products[featuredIndex].imageRef.replace(/^\/+/, '')}`}
+      alt={products[featuredIndex].name}
+    />
+
+    <div className="home__slide-content">
+      <h2 className="home__slide-headline">
+        {products[featuredIndex].name}
+      </h2>
+
+      <p className="home__slide-text">
+        {products[featuredIndex].description}
+      </p>
+
+      <p className="home__slide-text">
+        From ${products[featuredIndex].price.toFixed(2)}
+      </p>
+
+      <button
+        type="button"
+        className="btn btn-primary home__btn"
+        onClick={() => setSelectedProduct(products[featuredIndex])}
+      >
+        View Details
+      </button>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    className="home__arrow home__arrow--prev"
+    aria-label="Previous product"
+    disabled={products.length <= 1}
+    onClick={() =>
+      setFeaturedIndex((current) =>
+        (current - 1 + products.length) % products.length
+      )
+    }
+  >
+    ‹
+  </button>
+
+  <button
+    type="button"
+    className="home__arrow home__arrow--next"
+    aria-label="Next product"
+    disabled={products.length <= 1}
+    onClick={() =>
+      setFeaturedIndex((current) =>
+        (current + 1) % products.length
+      )
+    }
+  >
+    ›
+  </button>
+</div>
+        )}
+
+        {!productLoading && !productError && products.length > 0 && (
+          <p className="home__menu-counter">
+            {featuredIndex + 1} of {products.length}
+          </p>
+        )}
+
       </section>
 
       {/* Removed pick your size section, added Krazy good stuff section */}
@@ -157,7 +201,7 @@ function HomePage() {
         </div>
       </section>
 
-      
+
       {/* Order for Pickup */}
       <section className="page-container home__section">
         <div className="home__order">
@@ -177,6 +221,14 @@ function HomePage() {
       </section>
 
       {/* BPK-37: Business info (hours, location, social links) goes here */}
+
+      {/* BPK-100: Product details modal */}
+      {selectedProduct && (
+        <ProductDetailsModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </main>
   )
 }
