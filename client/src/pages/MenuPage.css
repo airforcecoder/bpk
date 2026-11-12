@@ -29,3 +29,18 @@
     grid-template-columns: 1fr;
   }
 }
+
+.menu-page__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-med);
+  margin-bottom: var(--space-lg);
+}
+
+.menu-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-med);
+}

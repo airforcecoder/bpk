@@ -7,6 +7,9 @@ import type { Product } from '../data/mockProducts'
 import ProductDetailsModal from '../components/ProductDetailsModal'
 
 import './MenuPage.css'
+import ProductSearchBar from '../components/ProductSearchBar'
+import { defaultFilters, filterProducts } from '../utils/filterProducts'
+import ProductFilterControls from '../components/ProductFilterControls'
 
 function MenuPage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -15,6 +18,7 @@ function MenuPage() {
 
    /* Ians modal code to pop out details */
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [filters, setFilters] = useState(defaultFilters)
 
   useEffect(() => {
     let isCurrent = true
@@ -35,6 +39,7 @@ function MenuPage() {
     }
   }, [])
 
+  const visibleProducts = filterProducts(products, filters)
   return (
     <main className="page-container menu-page">
       <h1 className="menu-page__title">Our Flavors</h1>
@@ -52,18 +57,46 @@ function MenuPage() {
       )}
 
       {!isLoading && !hasError && products.length > 0 && (
-        <section className="menu-page__grid" aria-label="Menu products">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
+  <>
+    <div className="menu-page__toolbar">
+      <ProductSearchBar
+        value={filters.query}
+        onChange={(query) => setFilters((current) => ({ ...current, query }))}
+      />
+      <ProductFilterControls
+  availability={filters.availability}
+  sort={filters.sort}
+  onAvailabilityChange={(availability) =>
+    setFilters((current) => ({ ...current, availability }))
+  }
+  onSortChange={(sort) => setFilters((current) => ({ ...current, sort }))}
+/>
+    </div>
 
-              /* Ians modal code to pop out details */
-              onSelect={setSelectedProduct}
-            />
-          ))}
-        </section>
-      )}
+    {visibleProducts.length === 0 ? (
+  <div className="menu-page__message menu-page__empty" role="status">
+    <p>No flavors match your search.</p>
+    <button
+      type="button"
+      className="btn btn-primary"
+      onClick={() => setFilters(defaultFilters)}
+    >
+      Clear filters
+    </button>
+  </div>
+) : (
+  <section className="menu-page__grid" aria-label="Menu products">
+    {visibleProducts.map((product) => (
+      <ProductCard
+        key={product.id}
+        product={product}
+        onSelect={setSelectedProduct}
+      />
+    ))}
+  </section>
+)}
+  </>
+)}
 
 
        {/* Ians modal code to pop out details */}

@@ -1,0 +1,30 @@
+.product-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-med);
+}
+
+.product-filters__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.product-filters__label {
+  color: var(--color-white);
+  font-family: var(--font-display);
+}
+
+.product-filters__select {
+  padding: var(--space-sm) var(--space-med);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+  color: var(--color-black);
+  font-size: 1rem;
+}
+
+.product-filters__select:focus-visible {
+  outline: 3px solid var(--color-yellow);
+  outline-offset: 2px;
+}
