@@ -9,6 +9,7 @@ import ProductDetailsModal from '../components/ProductDetailsModal'
 import './MenuPage.css'
 import ProductSearchBar from '../components/ProductSearchBar'
 import { defaultFilters, filterProducts } from '../utils/filterProducts'
+import ProductFilterControls from '../components/ProductFilterControls'
 
 function MenuPage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -62,6 +63,14 @@ function MenuPage() {
         value={filters.query}
         onChange={(query) => setFilters((current) => ({ ...current, query }))}
       />
+      <ProductFilterControls
+  availability={filters.availability}
+  sort={filters.sort}
+  onAvailabilityChange={(availability) =>
+    setFilters((current) => ({ ...current, availability }))
+  }
+  onSortChange={(sort) => setFilters((current) => ({ ...current, sort }))}
+/>
     </div>
 
     <section className="menu-page__grid" aria-label="Menu products">
