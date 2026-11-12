@@ -1,0 +1,43 @@
+.product-search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  flex: 1 1 16rem;
+}
+
+.product-search__label {
+  color: var(--color-white);
+  font-family: var(--font-display);
+}
+
+.product-search__field {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.product-search__input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-sm) var(--space-med);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+  color: var(--color-black);
+  font-size: 1rem;
+}
+
+.product-search__input:focus-visible,
+.product-search__clear:focus-visible {
+  outline: 3px solid var(--color-yellow);
+  outline-offset: 2px;
+}
+
+.product-search__clear {
+  padding: var(--space-sm) var(--space-med);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-pill);
+  background: var(--color-yellow);
+  color: var(--color-black);
+  font-family: var(--font-display);
+  cursor: pointer;
+}
