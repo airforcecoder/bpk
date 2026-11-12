@@ -73,15 +73,28 @@ function MenuPage() {
 />
     </div>
 
-    <section className="menu-page__grid" aria-label="Menu products">
-      {visibleProducts.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          onSelect={setSelectedProduct}
-        />
-      ))}
-    </section>
+    {visibleProducts.length === 0 ? (
+  <div className="menu-page__message menu-page__empty" role="status">
+    <p>No flavors match your search.</p>
+    <button
+      type="button"
+      className="btn btn-primary"
+      onClick={() => setFilters(defaultFilters)}
+    >
+      Clear filters
+    </button>
+  </div>
+) : (
+  <section className="menu-page__grid" aria-label="Menu products">
+    {visibleProducts.map((product) => (
+      <ProductCard
+        key={product.id}
+        product={product}
+        onSelect={setSelectedProduct}
+      />
+    ))}
+  </section>
+)}
   </>
 )}
 
