@@ -1,0 +1,16 @@
+{
+  "name": "bpk",
+  "private": true,
+  "description": "Banana Pudding Krazy website: React frontend (client/) and product API (server/)",
+  "scripts": {
+    "dev": "concurrently --names client,server --prefix-colors magenta,cyan --kill-others-on-fail \"npm --prefix client run dev\" \"npm --prefix server run dev\"",
+    "install:all": "npm install && npm --prefix client install && npm --prefix server install",
+    "test": "npm --prefix server test",
+    "typecheck": "npm --prefix server run typecheck && cd client && npx tsc -b",
+    "build": "npm --prefix client run build",
+    "lint": "npm --prefix client run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  }
+}
