@@ -1,10 +1,11 @@
-/* Home page layout, uses tokens from styles/variables.css */
+/* BPK-101: Homepage layout and responsive styling.
+   Uses the shared tokens from styles/variables.css. */
 
 .home {
   padding-bottom: var(--space-xxl);
 }
 
-/* Shared section styles */
+/* Shared homepage sections */
 .home__section {
   padding-top: var(--space-xxl);
 }
@@ -18,25 +19,13 @@
   text-transform: uppercase;
 }
 
-/* Placeholder image box, swap for real <img> later */
-.home__placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-darkpurple);
-  color: var(--color-white);
-  font-family: var(--font-display);
-  text-transform: uppercase;
-}
-
-/* Shared button tweaks */
 .home__btn {
   font-family: var(--font-display);
   text-transform: uppercase;
   padding: var(--space-med) var(--space-xl);
 }
 
-/* Hero carousel */
+/* BPK-100: Full-size menu carousel, replacing the original promotional hero */
 .home__hero {
   position: relative;
   height: 60vh;
@@ -46,11 +35,20 @@
   border-bottom: 3px solid var(--color-black);
 }
 
+.home__menu-hero {
+  height: 500px;
+  min-height: 500px;
+  margin: 0 auto;
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+}
+
 .home__slide {
   position: absolute;
   inset: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition), visibility var(--transition);
@@ -62,7 +60,13 @@
 }
 
 .home__slide-image {
+  display: block;
+  width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: cover;
+  object-position: center;
 }
 
 .home__slide-content {
@@ -71,6 +75,7 @@
   align-items: flex-start;
   justify-content: center;
   gap: var(--space-med);
+  min-width: 0;
   padding: var(--space-xxl);
   background: var(--color-yellow);
   color: var(--color-black);
@@ -83,15 +88,18 @@
   line-height: 1.1;
   color: var(--color-purple);
   text-transform: uppercase;
+  overflow-wrap: break-word;
 }
 
 .home__slide-text {
   margin: 0;
   font-size: 1.25rem;
+  overflow-wrap: break-word;
 }
 
 .home__arrow {
   position: absolute;
+  z-index: 1;
   top: 50%;
   transform: translateY(-50%);
   width: 44px;
@@ -102,11 +110,22 @@
   color: var(--color-white);
   font-size: 1.75rem;
   line-height: 1;
+  cursor: pointer;
   transition: background var(--transition-fast);
 }
 
-.home__arrow:hover {
+.home__arrow:hover:not(:disabled) {
   background: var(--color-purple);
+}
+
+.home__arrow:focus-visible {
+  outline: 3px solid var(--color-purple);
+  outline-offset: 3px;
+}
+
+.home__arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .home__arrow--prev {
@@ -117,106 +136,59 @@
   right: var(--space-med);
 }
 
-.home__dots {
-  position: absolute;
-  bottom: var(--space-med);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: var(--space-sm);
+.home__menu-counter {
+  margin: var(--space-med) 0 0;
+  text-align: center;
 }
 
-.home__dot {
-  width: 12px;
-  height: 12px;
-  padding: 0;
-  border: 2px solid var(--color-black);
-  border-radius: var(--radius-pill);
-  background: var(--color-white);
-}
-
-.home__dot--active {
-  background: var(--color-orange);
-}
-
-/* Pick Your Size */
+/* BPK-98: Krazy Good Stuff monthly features */
 .home__sizes {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-lg);
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .home__size-card {
+  min-width: 0;
   text-align: center;
 }
 
 .home__size-image {
+  display: block;
+  width: 100%;
   aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
   border: 3px solid var(--color-black);
   border-radius: var(--radius-lg);
+  box-sizing: border-box;
 }
 
-.home__size-name {
-  margin: var(--space-med) 0 var(--space-xs);
+.home__feature-title {
+  margin: 0 0 var(--space-med);
   font-family: var(--font-display);
   font-size: 1.5rem;
+  color: var(--color-yellow);
   text-transform: uppercase;
-}
-
-.home__size-text {
-  margin: 0;
-}
-
-/* Our Flavors */
-.home__pills {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
-}
-
-.home__pill {
-  border: 2px solid var(--color-black);
-  border-radius: var(--radius-pill);
-  padding: var(--space-xs) var(--space-med);
-  background: var(--color-white);
-  color: var(--color-black);
-  transition: background var(--transition-fast);
-}
-
-.home__pill:hover {
-  background: var(--color-yellow);
-}
-
-.home__pill--active,
-.home__pill--active:hover {
-  background: var(--color-black);
-  color: var(--color-white);
-}
-
-.home__flavors {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-lg);
-}
-
-.home__flavor-card {
   text-align: center;
 }
 
-.home__flavor-image {
-  aspect-ratio: 1 / 1;
-  border: 3px solid var(--color-black);
-  border-radius: var(--radius-med);
+.home__feature-name {
+  margin: var(--space-med) 0 var(--space-xs);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  text-align: center;
 }
 
-.home__flavor-name {
-  margin: var(--space-sm) 0 0;
-  font-size: 1rem;
+.home__feature-description {
+  margin: 0;
+  text-align: center;
 }
 
-/* Order Your Way */
+/* Order for Pickup */
 .home__order {
   display: flex;
   flex-direction: column;
@@ -236,11 +208,12 @@
 
 .home__order-options {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   width: 100%;
 }
 
 .home__order-option {
+  min-width: 0;
   padding: 0 var(--space-lg);
   text-align: center;
 }
@@ -261,10 +234,10 @@
   margin: 0;
 }
 
-/* Responsive */
+/* Tablet and smaller desktop */
 @media (max-width: 1024px) {
-  .home__flavors {
-    grid-template-columns: repeat(3, 1fr);
+  .home__slide-content {
+    padding: var(--space-lg);
   }
 
   .home__slide-headline {
@@ -272,6 +245,7 @@
   }
 }
 
+/* Tablet / mobile: stack menu photo above the product information */
 @media (max-width: 768px) {
   .home__section {
     padding-top: var(--space-xl);
@@ -281,40 +255,53 @@
     font-size: 1.5rem;
   }
 
-  /* Hero stacks: image on top, text below */
-  .home__slide {
-    grid-template-columns: 1fr;
-    grid-template-rows: 2fr 3fr;
+  .home__menu-hero {
+    height: auto;
+    min-height: 0;
   }
 
-  .home__slide-content {
+  .home__menu-hero .home__slide {
+    position: relative;
+    inset: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .home__menu-hero .home__slide-image {
+  width: 100%;
+  height: clamp(190px, 55vw, 280px);
+  max-height: none;
+  aspect-ratio: auto;
+  object-fit: cover;
+  object-position: center;
+}
+
+  .home__menu-hero .home__slide-content {
     align-items: center;
     text-align: center;
-    padding: var(--space-lg) var(--space-xxl);
+    padding: var(--space-lg);
+    gap: var(--space-sm);
   }
 
-  .home__slide-headline {
+  .home__menu-hero .home__slide-headline {
     font-size: 1.75rem;
+    overflow-wrap: anywhere;
   }
 
-  .home__slide-text {
+  .home__menu-hero .home__slide-text {
     font-size: 1rem;
   }
 
-  .home__arrow {
-    top: 20%;
-    transform: none;
+  .home__menu-hero .home__arrow {
+    top: clamp(80px, 28vw, 140px);
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
   }
 
   .home__sizes {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     max-width: 400px;
-    margin: 0 auto;
-  }
-
-  .home__flavors {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-med);
   }
 
   .home__order {
@@ -322,7 +309,7 @@
   }
 
   .home__order-options {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-lg);
   }
 
@@ -333,12 +320,29 @@
   }
 }
 
+/* Small phones */
 @media (max-width: 480px) {
-  .home__slide-content {
+  .home__menu-hero .home__slide-content {
     padding: var(--space-med) var(--space-lg);
+  }
+
+  .home__menu-hero .home__slide-image {
+    height: 220px;
+  }
+
+  .home__menu-hero .home__arrow--prev {
+    left: var(--space-sm);
+  }
+
+  .home__menu-hero .home__arrow--next {
+    right: var(--space-sm);
   }
 
   .home__btn {
     padding: var(--space-sm) var(--space-lg);
+  }
+
+  .home__feature-title {
+    font-size: 1.25rem;
   }
 }
