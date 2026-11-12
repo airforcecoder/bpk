@@ -64,7 +64,7 @@ export const mockProducts: Product[] = [
     description: 'Chocolate pudding layered with Oreos and bananas.',
     price: 9,
     imageRef: '/images/chocolate-oreo-blast.jpg',
-    availability: 'available',
+    availability: 'unavailable',
     sizes: [
       { name: 'Mini (8oz)', price: 9 },
       { name: 'Selfie (16oz)', price: 15 },
