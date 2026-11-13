@@ -7,6 +7,9 @@ import { useEffect, useRef, useState } from 'react'
 /* Import styling for the modal */
 import './ProductDetailsModal.css'
 
+/*BPK-138: Import product ingredients service */
+import {  getProductIngredients, type ProductIngredientsResult} from '../services/productIngredientsService'
+
 /* Product we clicked, and close behavior as a modal */
 type ProductDetailsModalProps = {
     product: Product
@@ -107,6 +110,31 @@ useEffect(() => {
     /* Adding image to the pop up modal */
     const [imageFailed, setImageFailed] = useState(false)
 
+    /* Ingredients and allergens (BPK-138), loaded through the JSON reader service.
+       The result is stored with the product ID it belongs to, so a slow answer for a
+       previous product (or a closed modal) can never show up on the wrong one. */
+    const [loaded, setLoaded] = useState<{
+        productId: string
+        result: ProductIngredientsResult
+    } | null>(null)
+
+    useEffect(() => {
+        let ignore = false
+        getProductIngredients(product.id).then((result) => {
+            if (!ignore) setLoaded({ productId: product.id, result })
+        })
+        return () => {
+            ignore = true
+        }
+    }, [product.id])
+
+    /* null means "still loading for this product" */
+    const result = loaded?.productId === product.id ? loaded.result : null
+    const found = result?.kind === 'found' ? result.data : null
+    const ingredientList = found?.ingredients ?? []
+    const allergenList = found?.allergens ?? []
+    const ingredientsApproved = found?.status === 'approved'
+
     return(
         <div className = "product-modal-backdrop">
             <section
@@ -144,37 +172,70 @@ useEffect(() => {
                         {product.description || 'Description coming soon.'}
                         </p>
 
-                    <div className="product-modal-quantity">
+                    {/* Ingredients and allergens 138 */}
+                    <section
+                        className="product-modal-nutrition"
+                        aria-label="Ingredients and allergens"
+                    >
+                        {result === null && (
+                            <p className="product-modal-nutrition-empty" role="status">
+                                Loading ingredient and allergen information…
+                            </p>
+                        )}
 
-                        {/*Modal quantity features */}
-                        <span id="quantity-label">Quantity</span>
+                        {result?.kind === 'error' && (
+                            <p className="product-modal-nutrition-note" role="alert">
+                                We couldn't load ingredient and allergen information right now.
+                                Please contact Banana Pudding Krazy to confirm ingredients and
+                                allergens before ordering.
+                            </p>
+                        )}
 
-                        <div
-                            className="product-modal-quantity-controls"
-                            role="group"
-                            aria-labelledby="quantity-label"
-                        >
-                            <button
-                            type="button"
-                            onClick={decreaseQuantity}
-                            disabled={quantity === 1}
-                            aria-label="Decrease quantity"
-                            >
-                            -
-                            </button>
+                        {result?.kind === 'not-found' && (
+                            <p className="product-modal-nutrition-note">
+                                Ingredient and allergen information for this product is pending
+                                confirmation. Please contact Banana Pudding Krazy before ordering.
+                            </p>
+                        )}
 
-                            <span>{quantity}</span>
+                        {found && (
+                            <>
+                                <h3>Ingredients</h3>
+                                {ingredientList.length > 0 ? (
+                                    <ul className="product-modal-nutrition-list">
+                                        {ingredientList.map((item) => (
+                                            <li key={item}>{item}</li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="product-modal-nutrition-empty">
+                                        Ingredient information is not available yet.
+                                    </p>
+                                )}
 
-                            <button
-                            type="button"
-                            onClick={increaseQuantity}
-                            disabled={quantity >= MAX_QUANTITY}
-                            aria-label="Increase quantity"
-                            >
-                            +
-                            </button>
-                        </div>
-                    </div>
+                                <h3>Allergens</h3>
+                                {allergenList.length > 0 ? (
+                                    <ul className="product-modal-nutrition-list">
+                                        {allergenList.map((item) => (
+                                            <li key={item}>{item}</li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="product-modal-nutrition-empty">
+                                        Allergen information is not available yet.
+                                    </p>
+                                )}
+
+                                {!ingredientsApproved && (
+                                    <p className="product-modal-nutrition-note" role="note">
+                                        Sample information, pending confirmation from Banana Pudding
+                                        Krazy. Please contact us to confirm ingredients and allergens
+                                        before ordering.
+                                    </p>
+                                )}
+                            </>
+                        )}
+                    </section>
 
                     {/* Sizes */}
                     {product.sizes && product.sizes.length > 0 && (

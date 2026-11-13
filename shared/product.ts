@@ -4,6 +4,13 @@
 
 export type ProductAvailability = "available" | "unavailable";
 
+/* BPK-138:51  */
+export interface ProductIngredients {
+  ingredients?: string[]
+  allergens?: string[]
+  status?: 'approved' | 'pending'   // missing status is treated as pending
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -22,6 +29,8 @@ export interface Product {
     name: string
     price: number
   }[]
+  /* Optional ingredient and allergen info */
+  nutrition?: ProductIngredients
 }
 
 export const mockProducts: Product[] = [
@@ -44,6 +53,11 @@ export const mockProducts: Product[] = [
     customizations: [
       { id: 'no-banana', name: 'No Banana', price: 0 },
     ],
+    nutrition: {
+      status: 'pending', // MOCK: not yet approved by Kendra
+      ingredients: ['Vanilla pudding', 'Bananas', 'Vanilla wafers', 'Chessmen cookie'],
+      allergens: ['Milk', 'Wheat', 'Eggs'],
+    },
   },
   {
     id: 'prod-002',
