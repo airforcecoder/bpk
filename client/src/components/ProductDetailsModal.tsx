@@ -107,6 +107,12 @@ useEffect(() => {
     /* Adding image to the pop up modal */
     const [imageFailed, setImageFailed] = useState(false)
 
+    /* Ingredients and allergens (BPK-138:51) */
+    const ingredients = product.nutrition?.ingredients?.filter(Boolean) ?? []
+    const allergens = product.nutrition?.allergens?.filter(Boolean) ?? []
+    const hasNutrition = ingredients.length > 0 || allergens.length > 0
+    const nutritionApproved = product.nutrition?.status === 'approved'
+
     return(
         <div className = "product-modal-backdrop">
             <section
@@ -143,6 +149,48 @@ useEffect(() => {
                         <p className="product-modal-description">
                         {product.description || 'Description coming soon.'}
                         </p>
+
+                {/* Ingredients and allergens */}
+                {hasNutrition && (
+                    <section
+                        className="product-modal-details"
+                        aria-label="Ingredients and allergens"
+                    >
+                        <h3>Ingredients</h3>
+                        {ingredients.length > 0 ? (
+                            <ul className="product-modal-details-list">
+                                {ingredients.map((item) => (
+                                    <li key={item}>{item}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="product-modal-details-empty">
+                                Ingredient information is not available yet.
+                            </p>
+                        )}
+
+                        <h3>Allergens</h3>
+                        {allergens.length > 0 ? (
+                            <ul className="product-modal-details-list">
+                                {allergens.map((item) => (
+                                    <li key={item}>{item}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="product-modal-details-empty">
+                                Allergen information is not available yet.
+                            </p>
+                        )}
+
+                        {!nutritionApproved && (
+                            <p className="product-modal-details-note" role="note">
+                                Sample information, pending confirmation from Banana Pudding
+                                Krazy. Please contact us to confirm ingredients and allergens
+                                before ordering.
+                            </p>
+                        )}
+                    </section>
+                )}
 
                     <div className="product-modal-quantity">
 
