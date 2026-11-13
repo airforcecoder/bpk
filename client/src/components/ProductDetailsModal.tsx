@@ -153,37 +153,37 @@ useEffect(() => {
                 {/* Ingredients and allergens */}
                 {hasNutrition && (
                     <section
-                        className="product-modal-details"
+                        className="product-modal-nutrition"
                         aria-label="Ingredients and allergens"
                     >
                         <h3>Ingredients</h3>
                         {ingredients.length > 0 ? (
-                            <ul className="product-modal-details-list">
+                            <ul className="product-modal-nutrition-list">
                                 {ingredients.map((item) => (
                                     <li key={item}>{item}</li>
                                 ))}
                             </ul>
                         ) : (
-                            <p className="product-modal-details-empty">
+                            <p className="product-modal-nutrition-empty">
                                 Ingredient information is not available yet.
                             </p>
                         )}
 
                         <h3>Allergens</h3>
                         {allergens.length > 0 ? (
-                            <ul className="product-modal-details-list">
+                            <ul className="product-modal-nutrition-list">
                                 {allergens.map((item) => (
                                     <li key={item}>{item}</li>
                                 ))}
                             </ul>
                         ) : (
-                            <p className="product-modal-details-empty">
+                            <p className="product-modal-nutrition-empty">
                                 Allergen information is not available yet.
                             </p>
                         )}
 
                         {!nutritionApproved && (
-                            <p className="product-modal-details-note" role="note">
+                            <p className="product-modal-nutrition-note" role="note">
                                 Sample information, pending confirmation from Banana Pudding
                                 Krazy. Please contact us to confirm ingredients and allergens
                                 before ordering.
