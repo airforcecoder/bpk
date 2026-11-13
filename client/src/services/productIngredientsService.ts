@@ -1,10 +1,16 @@
-/* BPK-138:52 Frontend static-file reader for ingredient and allergen details.
+/* BPK-138: Frontend static-file reader for ingredient and allergen details.
    This is NOT the backend API. It reads client/public/data/ProductIngredients.json.
    Kept separate from productService so a real API can replace this source later. */
 
 import type { ProductIngredients } from '../../../shared/product'
 
-const INGREDIENTS_URL = `${import.meta.env.BASE_URL}data/ProductIngredients.json`
+const INGREDIENTS_URL = `${import.meta.env.BASE_URL}data/productIngredients.json`
+
+/* What callers get back. The function never throws, so the UI can show each case. */
+export type ProductIngredientsResult =
+  | { kind: 'found'; data: ProductIngredients }
+  | { kind: 'not-found' }  // unknown ID, or an entry with no usable lists
+  | { kind: 'error' }      // file missing, network problem, or invalid JSON
 
 /* The file is fetched once, then looked up in memory */
 let cache: Promise<Map<string, ProductIngredients>> | null = null
@@ -36,40 +42,39 @@ function normalizeEntry(raw: unknown): ProductIngredients | null {
   }
 }
 
+/* Throws on any file problem; getProductIngredients turns that into { kind: 'error' } */
 async function loadIngredients(): Promise<Map<string, ProductIngredients>> {
-  const ingredientsById = new Map<string, ProductIngredients>()
+  const response = await fetch(INGREDIENTS_URL)
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
-  try {
-    const response = await fetch(INGREDIENTS_URL)
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
-
-    const data: unknown = await response.json()
-    const products =
-      typeof data === 'object' && data !== null
-        ? (data as { products?: unknown }).products
-        : undefined
-
-    if (typeof products === 'object' && products !== null) {
-      for (const [id, raw] of Object.entries(products)) {
-        const entry = normalizeEntry(raw)
-        if (entry) ingredientsById.set(id, entry)
-      }
-    }
-  } catch (error) {
-    /* Missing file, network problem, or invalid JSON: the page keeps working */
-    console.warn('productIngredientsService: could not load product ingredients', error)
-    cache = null /* let the next call try again */
+  const data: unknown = await response.json()
+  const products =
+    typeof data === 'object' && data !== null
+      ? (data as { products?: unknown }).products
+      : undefined
+  if (typeof products !== 'object' || products === null) {
+    throw new Error('Unexpected file format')
   }
 
+  const ingredientsById = new Map<string, ProductIngredients>()
+  for (const [id, raw] of Object.entries(products)) {
+    const entry = normalizeEntry(raw)
+    if (entry) ingredientsById.set(id, entry)
+  }
   return ingredientsById
 }
 
-/* Returns the ingredients and allergens for a product ID, or null when there are none
-   (unknown ID, missing fields, or the file could not be read). Never throws. */
 export async function getProductIngredients(
   productId: string
-): Promise<ProductIngredients | null> {
-  cache ??= loadIngredients()
-  const ingredientsById = await cache
-  return ingredientsById.get(productId) ?? null
+): Promise<ProductIngredientsResult> {
+  const pending = (cache ??= loadIngredients())
+  try {
+    const ingredientsById = await pending
+    const data = ingredientsById.get(productId)
+    return data ? { kind: 'found', data } : { kind: 'not-found' }
+  } catch (error) {
+    if (cache === pending) cache = null /* let the next call try again */
+    console.warn('productIngredientsService: could not load product ingredients', error)
+    return { kind: 'error' }
+  }
 }
