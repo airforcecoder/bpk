@@ -4,6 +4,13 @@
 
 export type ProductAvailability = "available" | "unavailable";
 
+/* BPK-138:51  */
+export interface ProductIngredients {
+  ingredients?: string[]
+  allergens?: string[]
+  status?: 'approved' | 'pending'   // missing status is treated as pending
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -22,6 +29,8 @@ export interface Product {
     name: string
     price: number
   }[]
+  /* Optional ingredient and allergen info */
+  nutrition?: ProductIngredients
 }
 
 export const mockProducts: Product[] = [

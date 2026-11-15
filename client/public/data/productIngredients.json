@@ -1,0 +1,33 @@
+{
+  "_notice": "MOCK DATA for development. Nothing here is approved by the client. Ingredients are taken from the existing product descriptions only, and allergen lists are placeholders. Do not treat any entry as fact until its status is 'approved'.",
+  "products": {
+    "prod-001": {
+      "status": "pending",
+      "ingredients": ["Vanilla pudding", "Bananas", "Vanilla wafers", "Chessmen cookie"],
+      "allergens": ["Milk", "Wheat", "Eggs"]
+    },
+    "prod-002": {
+      "status": "pending",
+      "ingredients": ["Vanilla pudding", "Fresh bananas", "Biscoff cookies"]
+    },
+    "prod-003": {
+      "status": "pending",
+      "ingredients": ["Chocolate pudding", "Oreos", "Bananas"]
+    },
+    "prod-004": {
+      "status": "pending",
+      "ingredients": ["Lemon pudding", "Buttery cookie crumbs", "Blueberry compote"]
+    },
+    "prod-005": {
+      "status": "pending",
+      "ingredients": ["Vanilla pudding", "Bananas", "Frosted animal cookies", "Sprinkles"]
+    },
+    "prod-006": {
+      "status": "pending",
+      "ingredients": ["Vanilla pudding", "Cookie crumbs", "Peach cobbler filling"]
+    },
+    "prod-007": {
+      "status": "pending"
+    }
+  }
+}
