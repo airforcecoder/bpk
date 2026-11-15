@@ -53,11 +53,6 @@ export const mockProducts: Product[] = [
     customizations: [
       { id: 'no-banana', name: 'No Banana', price: 0 },
     ],
-    nutrition: {
-      status: 'pending', // MOCK: not yet approved by Kendra
-      ingredients: ['Vanilla pudding', 'Bananas', 'Vanilla wafers', 'Chessmen cookie'],
-      allergens: ['Milk', 'Wheat', 'Eggs'],
-    },
   },
   {
     id: 'prod-002',

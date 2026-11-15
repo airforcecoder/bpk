@@ -172,6 +172,38 @@ useEffect(() => {
                         {product.description || 'Description coming soon.'}
                         </p>
 
+                <div className="product-modal-quantity">
+
+                    {/*Modal quantity features */}
+                    <span id="quantity-label">Quantity</span>
+
+                    <div
+                        className="product-modal-quantity-controls"
+                        role="group"
+                        aria-labelledby="quantity-label"
+                    >
+                        <button
+                            type="button"
+                            onClick={decreaseQuantity}
+                            disabled={quantity === 1}
+                            aria-label="Decrease quantity"
+                        >
+                            -
+                        </button>
+
+                        <span>{quantity}</span>
+
+                        <button
+                            type="button"
+                            onClick={increaseQuantity}
+                            disabled={quantity >= MAX_QUANTITY}
+                            aria-label="Increase quantity"
+                        >
+                            +
+                        </button>
+                    </div>
+                </div>
+
                     {/* Ingredients and allergens 138 */}
                     <section
                         className="product-modal-nutrition"
