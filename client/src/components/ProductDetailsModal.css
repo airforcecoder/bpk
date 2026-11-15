@@ -270,3 +270,19 @@
 .product-modal-nutrition > :first-child {
   margin-top: 0;
 }
+
+.product-modal-nutrition summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--color-purple);
+    padding: var(--space-sm) 0;
+}
+
+.product-modal-nutrition summary:hover {
+    text-decoration: underline;
+}
+
+.product-modal-nutrition summary:focus-visible {
+    outline: 2px solid var(--color-purple);
+    outline-offset: 3px;
+}
