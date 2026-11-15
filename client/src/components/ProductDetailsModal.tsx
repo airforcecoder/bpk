@@ -205,10 +205,9 @@ useEffect(() => {
                 </div>
 
                     {/* Ingredients and allergens 138 */}
-                    <section
-                        className="product-modal-nutrition"
-                        aria-label="Ingredients and allergens"
-                    >
+                    {/* Collapsible ingredients and allergens */}
+                    <details className="product-modal-nutrition">
+                        <summary>Ingredients & Allergens</summary>
                         {result === null && (
                             <p className="product-modal-nutrition-empty" role="status">
                                 Loading ingredient and allergen information…
@@ -267,7 +266,7 @@ useEffect(() => {
                                 )}
                             </>
                         )}
-                    </section>
+                    </details>
 
                     {/* Sizes */}
                     {product.sizes && product.sizes.length > 0 && (
