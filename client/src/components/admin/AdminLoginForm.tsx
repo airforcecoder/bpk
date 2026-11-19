@@ -109,9 +109,6 @@ export default function AdminLoginForm({
         <br />
           Password: <strong>password123</strong>
 
-        <br /><br />
-
-          No real authentication or administrator access is provided.
         </div>
 
         <form onSubmit={handleSubmit} noValidate>
@@ -241,12 +238,6 @@ export default function AdminLoginForm({
 
         </form>
 
-        <footer className="admin-login-footer">
-          <p>
-            Admin authentication will be implemented
-            in Sprint 4 (BPK-86).
-          </p>
-        </footer>
 
       </div>
     </section>
