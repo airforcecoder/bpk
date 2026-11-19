@@ -2,6 +2,7 @@ import express, { type ErrorRequestHandler } from 'express'
 import { mockProducts, type Product } from '../../shared/product'
 import { sendError } from './errors'
 import { createProductsRouter } from './routes/products'
+import authRouter from '../routes/auth'
 
 /* BPK-140: Builds the Express app without starting it, so tests can call it directly.
    Products default to the shared seed data, tests can pass their own list. */
@@ -10,7 +11,11 @@ export function createApp(products: readonly Product[] = mockProducts) {
 
   app.disable('x-powered-by')
 
+  app.use(express.json());
+
   app.use('/api/products', createProductsRouter(products))
+
+  app.use(authRouter);
 
   /* Any other /api route gets a JSON 404 instead of Express's HTML page */
   app.use('/api', (req, res) => {

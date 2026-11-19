@@ -45,6 +45,27 @@
   background: var(--color-purple);
 }
 
+.admin-layout__logout {
+  width: 100%;
+  margin-top: var(--space-lg);
+  border: 2px solid var(--color-yellow);
+  background: transparent;
+  color: var(--color-yellow);
+  padding: var(--space-sm);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.admin-layout__logout:hover {
+  background: var(--color-yellow);
+  color: var(--color-black);
+}
+
 .admin-layout__content {
   min-width: 0;
 }

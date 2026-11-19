@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import type { LoginService } from "../../services/authentication/auth.interface";
+import { loginUser } from "../../services/authentication/authStorage";
 
 import { validateLogin } from "../../utils/loginValidation";
 
@@ -67,14 +68,20 @@ export default function AdminLoginForm({
       setMessage(result.message);
 
       if (result.success) {
+        loginUser();
         navigate("/admin/dashboard");
       }
 
-    } catch {
-      setSuccess(false);
-      setMessage(
-        "Unable to process the demonstration login. Please try again."
-      );
+    } catch (error) {
+  setSuccess(false);
+
+  if (error instanceof Error) {
+    setMessage(error.message);
+  } else {
+    setMessage(
+      "Authentication service is currently unavailable. Please try again later."
+    );
+  }
     } finally {
       setLoading(false);
       setPassword("");
