@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route } from 'react-router'
 import PublicLayout from './layouts/PublicLayout'
 
 import UITestPage from './pages/ui-test-page'
+import ProtectedRoute from "./components/admin/ProtectedRoute";
 import HomePage from './pages/HomePage'
 import MenuPage from './pages/MenuPage'
 import OrderPage from './pages/OrderPage'
@@ -25,7 +26,10 @@ function App() {
         </Route>
 
         <Route path="/ui-test" element={<UITestPage />} />
-        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+        <Route path="/admin/dashboard" element={
+          <ProtectedRoute>
+            <AdminDashboardPage />
+          </ProtectedRoute>} />
       </Routes>
     </HashRouter>
   )

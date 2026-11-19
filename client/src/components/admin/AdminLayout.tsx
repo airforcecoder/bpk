@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { NavLink } from 'react-router'
+import { NavLink, useNavigate } from 'react-router'
+import { logoutUser } from "../../services/authentication/authStorage";
 import './AdminLayout.css'
 
 type AdminNavItem = {
@@ -19,6 +20,12 @@ type AdminLayoutProps = {
 }
 
 function AdminLayout({ title, children }: AdminLayoutProps) {
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logoutUser()
+    navigate('/admin/login')
+  }
   return (
     <div className="admin-layout">
       <aside className="admin-layout__sidebar" aria-label="Admin navigation">
@@ -38,6 +45,13 @@ function AdminLayout({ title, children }: AdminLayoutProps) {
             </NavLink>
           ))}
         </nav>
+        <button
+          type="button"
+          className="admin-layout__logout"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
       </aside>
 
       <section className="admin-layout__content">
