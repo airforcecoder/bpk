@@ -7,6 +7,11 @@ export type ApiErrorCode =
   | 'PRODUCT_NOT_FOUND'
   | 'NOT_FOUND'
   | 'INTERNAL_ERROR'
+  /* BPK-71: write endpoints */
+  | 'INVALID_JSON'
+  | 'VALIDATION_ERROR'
+  | 'DUPLICATE_PRODUCT_ID'
+  | 'PAYLOAD_TOO_LARGE'
 
 export interface ApiErrorBody {
   error: {

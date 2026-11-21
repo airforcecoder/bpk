@@ -2,6 +2,7 @@ import request from 'supertest'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mockProducts, type Product } from '../../shared/product'
 import { createApp } from '../src/app'
+import { ProductStore } from '../src/productStore'
 
 const app = createApp()
 
@@ -99,8 +100,9 @@ describe('other API routes', () => {
     expectJsonError(res, 404, 'NOT_FOUND')
   })
 
+  /* POST and PUT exist now (BPK-71, see products.write.test.ts), DELETE still doesn't */
   it('returns a JSON 404 for an unsupported method on /api/products', async () => {
-    const res = await request(app).post('/api/products').send({ name: 'New product' })
+    const res = await request(app).delete('/api/products/prod-001')
 
     expectJsonError(res, 404, 'NOT_FOUND')
   })
@@ -113,12 +115,11 @@ describe('unexpected errors', () => {
 
   it('returns a generic JSON 500 without leaking error details', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {})
-    const brokenProducts = [...mockProducts]
-    brokenProducts.find = () => {
+    vi.spyOn(ProductStore.prototype, 'get').mockImplementation(() => {
       throw new Error('database exploded')
-    }
+    })
 
-    const res = await request(createApp(brokenProducts)).get('/api/products/prod-001')
+    const res = await request(createApp()).get('/api/products/prod-001')
 
     expectJsonError(res, 500, 'INTERNAL_ERROR')
     expect(JSON.stringify(res.body)).not.toContain('database exploded')
