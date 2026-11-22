@@ -1,0 +1,86 @@
+
+/* BPK-104: I keep the cart here so it doesn't reset
+   when someone moves between Home, Menu, and Cart. */
+
+import { useState, type ReactNode } from 'react'
+import {
+  CartContext,
+  type CartItem,
+  type AddCartItemInput,
+} from './CartContext'
+
+export function CartProvider({ children }: { children: ReactNode }) {
+
+  /* Start with an empty cart. */
+  const [items, setItems] = useState<CartItem[]>([])
+
+  /* This function adds the selected product to the cart. */
+  function addItem({
+    product,
+    selectedSize,
+    customizations,
+    notes,
+    unitPrice,
+    quantity,
+  }: AddCartItemInput) {
+
+    /* I don't want customers adding sold-out products. */
+    if (product.availability !== 'available') return
+
+    /* Make sure the quantity is at least 1. */
+    const safeQuantity = Math.max(1, Math.floor(quantity))
+
+    /* Remove extra spaces from the customer's notes. */
+    const cleanNotes = notes.trim()
+
+    /* I use the product and its selected options to make
+       an ID. Different choices should stay separate. */
+    const id = JSON.stringify([
+      product.id,
+      selectedSize,
+      customizations.map((option) => option.id).sort(),
+      cleanNotes,
+    ])
+
+    /* Update the cart using the items already there. */
+    setItems((current) => {
+
+      /* First, check if this same selection is in the cart. */
+      const existing = current.find((item) => item.id === id)
+
+      /* If it already exists, just increase the quantity. */
+      if (existing) {
+        return current.map((item) =>
+          item.id === id
+            ? { ...item, quantity: item.quantity + safeQuantity }
+            : item
+        )
+      }
+
+      /* Otherwise, add it as a new item.
+         I save the size, customizations, notes, and price. */
+      return [
+        ...current,
+        {
+          id,
+          productId: product.id,
+          productName: product.name,
+          imageRef: product.imageRef,
+          selectedSize,
+          customizations,
+          notes: cleanNotes,
+          unitPrice,
+          quantity: safeQuantity,
+        },
+      ]
+    })
+  }
+
+  /* Share the cart and addItem function
+     with the rest of the website. */
+  return (
+    <CartContext.Provider value={{ items, addItem }}>
+      {children}
+    </CartContext.Provider>
+  )
+}

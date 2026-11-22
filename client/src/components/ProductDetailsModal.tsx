@@ -10,6 +10,9 @@ import './ProductDetailsModal.css'
 /*BPK-138: Import product ingredients service */
 import {  getProductIngredients, type ProductIngredientsResult} from '../services/productIngredientsService'
 
+/* BPK-104: I need this to add products to the shared cart. */
+import { useCart } from '../context/CartContext'
+
 /* Product we clicked, and close behavior as a modal */
 type ProductDetailsModalProps = {
     product: Product
@@ -18,6 +21,12 @@ type ProductDetailsModalProps = {
 
 /* Our function to pop up details on page */
 function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
+
+/* Get the function for adding items to the cart. */
+const { addItem } = useCart()
+
+/* Keep track of whether I should show a confirmation. */
+const [addedToCart, setAddedToCart] = useState(false)
 
 
 /* Modal keyboard accessibility */
@@ -106,6 +115,32 @@ useEffect(() => {
         style: 'currency',
         currency: 'USD'
         })
+
+    /* BPK-104: When Add to Cart is clicked, I take
+   the customer's selections and save them in the cart. */
+    function handleAddToCart() {
+
+    /* Double-check that the product is available. */
+    if (product.availability !== 'available') return
+
+    /* Keep only the customizations the customer selected. */
+    const chosenCustomizations = (product.customizations ?? [])
+        .filter((option) => selectedCustomizations.includes(option.id))
+
+    /* Save one item with its selected options.
+        I include customization costs in the saved unit price. */
+    addItem({
+        product,
+        selectedSize,
+        customizations: chosenCustomizations,
+        notes,
+        unitPrice: unitPrice + customizationTotal,
+        quantity,
+    })
+
+  /* Let the customer know the item was added. */
+  setAddedToCart(true)
+}
 
     /* Adding image to the pop up modal */
     const [imageFailed, setImageFailed] = useState(false)
@@ -348,16 +383,26 @@ useEffect(() => {
                         : 'Sold Out'}
                     </p>
 
-                    {/* Cart functionality will be implemented later */}
+                    {/* BPK-104: Enable Add to Cart for available products.
+                        Sold-out products should still have a disabled button. */}
                     <button
                     type="button"
                     className="btn btn-primary product-modal-cart"
-                    disabled
+                    onClick={handleAddToCart}
+                    disabled={product.availability !== 'available'}
                     >
                     {product.availability === 'unavailable'
                         ? 'Sold Out'
                         : 'Add to Cart'}
                     </button>
+
+                    {/* Show a message after the customer adds an item.
+                        This lets them know their click worked. */}
+                    {addedToCart && (
+                    <p role="status">
+                        Added to cart!
+                    </p>
+                    )}
 
                 </section>
         </div>
