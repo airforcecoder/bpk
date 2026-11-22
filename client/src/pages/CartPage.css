@@ -1,0 +1,107 @@
+
+/* BPK-105: Styling for the customer shopping cart. */
+.cart-page {
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-xxl);
+}
+
+.cart-page__title {
+  font-family: var(--font-display);
+  margin-bottom: var(--space-lg);
+}
+
+/* Keep the empty cart centered with a link to the menu. */
+.cart-page__empty {
+  text-align: center;
+  padding: var(--space-xxl) var(--space-med);
+}
+
+.cart-page__empty p {
+  margin-bottom: var(--space-lg);
+}
+
+/* Put some space between the different cart items. */
+.cart-page__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Each item has its own section with the product details. */
+.cart-item {
+  display: flex;
+  gap: var(--space-lg);
+  background: var(--color-white);
+  color: var(--color-black);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+}
+
+.cart-item__image {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-med);
+}
+
+.cart-item__details {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-item__details h2 {
+  margin-top: 0;
+  font-family: var(--font-display);
+}
+
+.cart-item__details ul {
+  padding-left: var(--space-lg);
+}
+
+/* Keep the quantity buttons next to the current amount. */
+.cart-item__quantity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-med);
+  margin: var(--space-med) 0;
+}
+
+.cart-item__quantity button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-med);
+  background: var(--color-yellow);
+  color: var(--color-black);
+}
+
+.cart-item__quantity button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Make the subtotal easy to find. */
+.cart-item__subtotal {
+  font-weight: bold;
+}
+
+/* Remove button should look separate from the quantity buttons. */
+.cart-item__remove {
+  background: var(--color-darkpurple);
+  color: var(--color-white);
+  padding: var(--space-sm) var(--space-med);
+  border: none;
+  border-radius: var(--radius-med);
+}
+
+/* Stack the image and details on smaller screens. */
+@media (max-width: 600px) {
+  .cart-item {
+    flex-direction: column;
+  }
+
+  .cart-item__image {
+    width: 100%;
+    height: 220px;
+  }
+}

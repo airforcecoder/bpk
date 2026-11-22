@@ -76,10 +76,40 @@ export function CartProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  /* Share the cart and addItem function
-     with the rest of the website. */
+
+/* BPK-105: This lets me change the quantity
+   of an item that's already in the cart. */
+function updateQuantity(id: string, quantity: number) {
+
+  /* I don't want the quantity to go below 1. */
+  const newQuantity = Math.max(1, Math.floor(quantity))
+
+  /* Find the matching item and update its quantity. */
+  setItems((current) =>
+    current.map((item) =>
+      item.id === id
+        ? { ...item, quantity: newQuantity }
+        : item
+    )
+  )
+}
+
+/* BPK-105: Remove the item the customer selected. */
+function removeItem(id: string) {
+
+  /* Keep every item except the one being removed. */
+  setItems((current) =>
+    current.filter((item) => item.id !== id)
+  )
+}
+
+
+  /* BPK-105: Share the cart and its functions
+     so other pages can add, update, or remove items. */
   return (
-    <CartContext.Provider value={{ items, addItem }}>
+    <CartContext.Provider
+      value={{ items, addItem, updateQuantity, removeItem }}
+    >
       {children}
     </CartContext.Provider>
   )

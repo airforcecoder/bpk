@@ -34,12 +34,16 @@ export type AddCartItemInput = {
   quantity: number
 }
 
-/* For now, I only need to store items and add them.
-   The other cart actions will come in later subtasks. */
+
+/* BPK-105: I added two more functions so customers
+   can change quantities and remove items from the cart. */
 type CartContextValue = {
   items: CartItem[]
   addItem: (item: AddCartItemInput) => void
+  updateQuantity: (id: string, quantity: number) => void
+  removeItem: (id: string) => void
 }
+
 
 /* Create a place for the cart data to be shared. */
 export const CartContext =
