@@ -11,23 +11,33 @@ import AboutPage from './pages/AboutPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 
+/*BPK 68*/
+import { AnnouncementProvider } from './features/announcement/AnnouncementContext'
+import AnnouncementDemoPage from './features/announcement/AnnouncementDemoPage'
+import AnnouncementRouteLogger from './features/announcement/AnnouncementRouteLogger'
+/*BPK 68*/
+
 function App() {
   return (
-    <HashRouter>
-      <Routes>
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/menu" element={<MenuPage />} />
-          <Route path="/order" element={<OrderPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/admin/login" element={<AdminLoginPage />}/>
-        </Route>
+    <AnnouncementProvider>
+      <HashRouter>
+        <AnnouncementRouteLogger />
+        <Routes>
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/menu" element={<MenuPage />} />
+            <Route path="/order" element={<OrderPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route path="/announcement-demo" element={<AnnouncementDemoPage />} />
+          </Route>
 
-        <Route path="/ui-test" element={<UITestPage />} />
-        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-      </Routes>
-    </HashRouter>
+          <Route path="/ui-test" element={<UITestPage />} />
+          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+        </Routes>
+      </HashRouter>
+    </AnnouncementProvider>
   )
 }
 
