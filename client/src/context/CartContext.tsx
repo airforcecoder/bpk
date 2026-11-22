@@ -23,25 +23,27 @@ export type CartItem = {
   quantity: number
 }
 
-/* This is the information I send when adding
-   a product from the modal to the cart. */
+/* BPK-106: The provider will calculate the price,
+   so I don't need to send it from the modal anymore. */
 export type AddCartItemInput = {
   product: Product
   selectedSize: string
   customizations: CartItem['customizations']
   notes: string
-  unitPrice: number
   quantity: number
 }
 
 
 /* BPK-105: I added two more functions so customers
    can change quantities and remove items from the cart. */
+/* BPK-106: Add the total so the Cart page
+   can show the price of everything selected. */
 type CartContextValue = {
   items: CartItem[]
   addItem: (item: AddCartItemInput) => void
   updateQuantity: (id: string, quantity: number) => void
   removeItem: (id: string) => void
+  cartTotal: number
 }
 
 

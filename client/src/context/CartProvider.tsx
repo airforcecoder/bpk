@@ -9,20 +9,25 @@ import {
   type AddCartItemInput,
 } from './CartContext'
 
+/* BPK-106: Use the shared pricing functions. */
+import {
+  calculateUnitPrice,
+  calculateCartTotal,
+} from '../utils/cartPricing'
+
 export function CartProvider({ children }: { children: ReactNode }) {
 
   /* Start with an empty cart. */
   const [items, setItems] = useState<CartItem[]>([])
 
-  /* This function adds the selected product to the cart. */
-  function addItem({
-    product,
-    selectedSize,
-    customizations,
-    notes,
-    unitPrice,
-    quantity,
-  }: AddCartItemInput) {
+/* BPK-104: Add the customer's selected product to the cart. */
+function addItem({
+  product,
+  selectedSize,
+  customizations,
+  notes,
+  quantity,
+}: AddCartItemInput) {
 
     /* I don't want customers adding sold-out products. */
     if (product.availability !== 'available') return
@@ -41,6 +46,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       customizations.map((option) => option.id).sort(),
       cleanNotes,
     ])
+
+    /* BPK-106: Calculate the unit price using the
+   product size and any customizations selected. */
+    const unitPrice = calculateUnitPrice(
+      product,
+      selectedSize,
+      customizations.map((option) => option.id)
+    )
 
     /* Update the cart using the items already there. */
     setItems((current) => {
@@ -103,13 +116,23 @@ function removeItem(id: string) {
   )
 }
 
+/* BPK-106: Add the subtotals of all cart items.
+   This recalculates whenever the cart state changes. */
+const cartTotal = calculateCartTotal(items) 
 
-  /* BPK-105: Share the cart and its functions
-     so other pages can add, update, or remove items. */
+
+   /* BPK-106: Share the cart items, functions, and total
+     so the other pages can use them. */
   return (
-    <CartContext.Provider
-      value={{ items, addItem, updateQuantity, removeItem }}
-    >
+<CartContext.Provider
+  value={{
+    items,
+    addItem,
+    updateQuantity,
+    removeItem,
+    cartTotal,
+  }}
+>
       {children}
     </CartContext.Provider>
   )

@@ -105,3 +105,22 @@
     height: 220px;
   }
 }
+
+/* BPK-106: Make the final cart total easy to see.
+   I used the website's existing colors and spacing. */
+.cart-page__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-med);
+  padding: var(--space-lg);
+  background: var(--color-yellow);
+  color: var(--color-black);
+  border-radius: var(--radius-lg);
+  font-size: 1.25rem;
+}
+
+.cart-page__total strong {
+  font-family: var(--font-display);
+}

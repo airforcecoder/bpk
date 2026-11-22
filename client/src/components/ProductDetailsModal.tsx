@@ -13,6 +13,13 @@ import {  getProductIngredients, type ProductIngredientsResult} from '../service
 /* BPK-104: I need this to add products to the shared cart. */
 import { useCart } from '../context/CartContext'
 
+/* BPK-106: Use the same price calculations as the cart. */
+import {
+  calculateUnitPrice,
+  calculateLineSubtotal,
+  formatPrice,
+} from '../utils/cartPricing'
+
 /* Product we clicked, and close behavior as a modal */
 type ProductDetailsModalProps = {
     product: Product
@@ -101,20 +108,19 @@ useEffect(() => {
     const [selectedCustomizations, setSelectedCustomizations] =
     useState<string[]>([])
 
-    /* Adding price calculation */
-    const size = product.sizes?.find(
-        (option) => option.name === selectedSize
+    
+    /* BPK-106: Get the price for the selected size
+    and add any paid customizations. */
+    const unitPrice = calculateUnitPrice(
+    product,
+    selectedSize,
+    selectedCustomizations
     )
-        const unitPrice = size?.price ?? product.price
-        const customizationTotal = (product.customizations ?? [])
-        .filter((option) => selectedCustomizations.includes(option.id))
-        .reduce((total, option) => total + option.price, 0)
-        const subtotal = (unitPrice + customizationTotal) * quantity
-        const formatPrice = (price: number) => price.toLocaleString('en-US', 
-        {
-        style: 'currency',
-        currency: 'USD'
-        })
+
+/* Multiply the unit price by the quantity
+   to show the subtotal in the modal. */
+const subtotal = calculateLineSubtotal(unitPrice, quantity)
+
 
     /* BPK-104: When Add to Cart is clicked, I take
    the customer's selections and save them in the cart. */
@@ -127,14 +133,13 @@ useEffect(() => {
     const chosenCustomizations = (product.customizations ?? [])
         .filter((option) => selectedCustomizations.includes(option.id))
 
-    /* Save one item with its selected options.
-        I include customization costs in the saved unit price. */
+    /* BPK-106: Save the selected product and its options.
+   The cart provider now calculates the price. */
     addItem({
         product,
         selectedSize,
         customizations: chosenCustomizations,
         notes,
-        unitPrice: unitPrice + customizationTotal,
         quantity,
     })
 

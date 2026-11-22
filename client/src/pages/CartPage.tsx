@@ -5,19 +5,18 @@
 import { Link } from 'react-router'
 import { useCart } from '../context/CartContext'
 import './CartPage.css'
+/* BPK-106: Use the shared subtotal and price formatting. */
+import {
+  calculateLineSubtotal,
+  formatPrice,
+} from '../utils/cartPricing'
 
 function CartPage() {
 
-  /* Get the cart items and functions from shared state. */
-  const { items, updateQuantity, removeItem } = useCart()
+ /* BPK-106: Get the full cart total from shared state. */
+const { items, updateQuantity, removeItem, cartTotal } = useCart()
 
-  /* Display prices as dollars with two decimal places.
-     I'll move the shared pricing into BPK-106. */
-  const formatPrice = (price: number) =>
-    price.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    })
+/* REMOVED OLD FORMAT PRICE ITS BEING IMPORTED */
 
   return (
     <main className="page-container cart-page">
@@ -115,10 +114,12 @@ function CartPage() {
                   </button>
                 </div>
 
-                {/* Show the price for this item and its quantity.
-                    I'll reuse the shared calculation in BPK-106. */}
+                {/* BPK-106: Use the shared function
+                    to calculate the subtotal for this item. */}
                 <p className="cart-item__subtotal">
-                  Subtotal: {formatPrice(item.unitPrice * item.quantity)}
+                Subtotal: {formatPrice(
+                    calculateLineSubtotal(item.unitPrice, item.quantity)
+                )}
                 </p>
 
                 {/* Remove this selection without affecting
@@ -135,6 +136,13 @@ function CartPage() {
               </div>
             </article>
           ))}
+
+        {/* BPK-106: Show the total price of everything
+            currently in the cart. */}
+        <div className="cart-page__total">
+        <span>Cart Total</span>
+        <strong>{formatPrice(cartTotal)}</strong>
+        </div>
 
           {/* Give customers a way to keep shopping. */}
           <Link to="/menu" className="btn btn-primary">
