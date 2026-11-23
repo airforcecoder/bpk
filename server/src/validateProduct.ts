@@ -38,6 +38,11 @@ const PRODUCT_FIELDS = [
   'customizations',
   'nutrition',
 ] as const satisfies readonly (keyof Product)[]
+/* Fails to compile if Product gains a field that PRODUCT_FIELDS (and the validator below) is missing */
+const productFieldsAreComplete: Exclude<keyof Product, (typeof PRODUCT_FIELDS)[number]> extends never
+  ? true
+  : false = true
+void productFieldsAreComplete
 
 export type ValidationResult =
   | { ok: true; product: Omit<Product, 'id'> & { id?: string } }

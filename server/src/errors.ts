@@ -12,6 +12,7 @@ export type ApiErrorCode =
   | 'VALIDATION_ERROR'
   | 'DUPLICATE_PRODUCT_ID'
   | 'PAYLOAD_TOO_LARGE'
+  | 'BAD_REQUEST'
 
 export interface ApiErrorBody {
   error: {

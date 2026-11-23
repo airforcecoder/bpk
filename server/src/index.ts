@@ -8,6 +8,6 @@ createApp().listen(PORT, () => {
   console.log(
     writeRoutesEnabled()
       ? 'Product write endpoints (POST/PUT /api/products) are ON for local development. Changes are in memory only.'
-      : 'Product write endpoints are OFF (NODE_ENV=production).',
+      : 'Product write endpoints are OFF. Start with --enable-product-writes (npm run dev does) to turn them on outside production.',
   )
 })
