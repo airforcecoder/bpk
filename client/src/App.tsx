@@ -14,14 +14,12 @@ import AdminLoginPage from './pages/AdminLoginPage'
 /*BPK 68*/
 import { AnnouncementProvider } from './features/announcement/AnnouncementContext'
 import AnnouncementDemoPage from './features/announcement/AnnouncementDemoPage'
-import AnnouncementRouteLogger from './features/announcement/AnnouncementRouteLogger'
 /*BPK 68*/
 
 function App() {
   return (
     <AnnouncementProvider>
       <HashRouter>
-        <AnnouncementRouteLogger />
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<HomePage />} />

@@ -1,12 +1,4 @@
-
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import { type ReactNode, useCallback, useEffect, useState } from 'react'
 import {
   clearAnnouncement,
   readAnnouncement,
@@ -14,48 +6,30 @@ import {
   type Announcement,
   writeAnnouncement,
 } from './announcementStore'
-
-type AnnouncementContextValue = {
-  announcement: Announcement
-  save: (message: string) => void
-  activate: () => void
-  deactivate: () => void
-  clear: () => void
-}
-
-const AnnouncementContext = createContext<AnnouncementContextValue | null>(null)
+import { AnnouncementContext } from './useAnnouncement'
 
 export function AnnouncementProvider({ children }: { children: ReactNode }) {
   const [announcement, setAnnouncement] = useState<Announcement>(() => readAnnouncement())
 
   useEffect(() => subscribeToAnnouncement(() => setAnnouncement(readAnnouncement())), [])
 
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      console.log('[announcement] state changed', announcement)
-    }
-  }, [announcement])
+  // Save keeps the current active state, so the editor's toggle and Save stay independent.
+  // A blank message can never stay active.
+  const save = useCallback(
+    (message: string) => {
+      const next = { message, active: announcement.active && message.trim() !== '' }
 
-  const save = useCallback((message: string) => {
-    const next = { message, active: false }
-
-    if (import.meta.env.DEV) {
-      console.log('[announcement] save', message)
-    }
-
-    writeAnnouncement(next)
-    setAnnouncement(next)
-  }, [])
+      writeAnnouncement(next)
+      setAnnouncement(next)
+    },
+    [announcement.active],
+  )
 
   const activate = useCallback(() => {
     const message = announcement.message.trim()
     if (!message) return
 
     const next = { message: announcement.message, active: true }
-
-    if (import.meta.env.DEV) {
-      console.log('[announcement] activate')
-    }
 
     writeAnnouncement(next)
     setAnnouncement(next)
@@ -64,19 +38,11 @@ export function AnnouncementProvider({ children }: { children: ReactNode }) {
   const deactivate = useCallback(() => {
     const next = { ...announcement, active: false }
 
-    if (import.meta.env.DEV) {
-      console.log('[announcement] deactivate')
-    }
-
     writeAnnouncement(next)
     setAnnouncement(next)
   }, [announcement])
 
   const clear = useCallback(() => {
-    if (import.meta.env.DEV) {
-      console.log('[announcement] clear')
-    }
-
     clearAnnouncement()
     setAnnouncement({ message: '', active: false })
   }, [])
@@ -86,12 +52,4 @@ export function AnnouncementProvider({ children }: { children: ReactNode }) {
       {children}
     </AnnouncementContext.Provider>
   )
-}
-
-export function useAnnouncement(): AnnouncementContextValue {
-  const value = useContext(AnnouncementContext)
-  if (!value) {
-    throw new Error('useAnnouncement must be used inside AnnouncementProvider')
-  }
-  return value
 }

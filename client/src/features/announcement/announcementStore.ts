@@ -30,11 +30,8 @@ export function readAnnouncement(): Announcement {
 
     const parsed: unknown = JSON.parse(stored)
     return isAnnouncement(parsed) ? parsed : EMPTY_ANNOUNCEMENT
-  } catch (error) {
-    if (import.meta.env.DEV) {
-      console.warn('[announcement] could not read from localStorage', error)
-    }
-
+  } catch {
+    // Storage can be unavailable or hold invalid JSON; fall back to an empty announcement.
     return EMPTY_ANNOUNCEMENT
   }
 }
@@ -46,14 +43,8 @@ function publishChange(): void {
 export function writeAnnouncement(announcement: Announcement): void {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(announcement))
-
-    if (import.meta.env.DEV) {
-      console.log('[announcement] wrote to localStorage', announcement)
-    }
-  } catch (error) {
-    if (import.meta.env.DEV) {
-      console.warn('[announcement] could not write to localStorage', error)
-    }
+  } catch {
+    // Storage can be unavailable (private mode, quota); the in-memory state still updates.
   }
 
   publishChange()
@@ -62,14 +53,8 @@ export function writeAnnouncement(announcement: Announcement): void {
 export function clearAnnouncement(): void {
   try {
     window.localStorage.removeItem(STORAGE_KEY)
-
-    if (import.meta.env.DEV) {
-      console.log('[announcement] cleared localStorage')
-    }
-  } catch (error) {
-    if (import.meta.env.DEV) {
-      console.warn('[announcement] could not clear localStorage', error)
-    }
+  } catch {
+    // Storage can be unavailable; the in-memory state still updates.
   }
 
   publishChange()
