@@ -214,6 +214,7 @@
 }
 
 .announcement-demo__toggle-label {
+  cursor: pointer;
   font-family: var(--font-display);
   text-transform: uppercase;
   color: var(--color-purple);

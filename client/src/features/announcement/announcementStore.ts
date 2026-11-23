@@ -1,8 +1,3 @@
-
-
-
-
-
 export type Announcement = {
   message: string
   active: boolean

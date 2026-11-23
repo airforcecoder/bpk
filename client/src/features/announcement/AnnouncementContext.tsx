@@ -25,15 +25,17 @@ export function AnnouncementProvider({ children }: { children: ReactNode }) {
     [announcement.active],
   )
 
-  const activate = useCallback(() => {
-    const message = announcement.message.trim()
-    if (!message) return
+const activate = useCallback((message: string) => {
+  if (!message.trim()) return
 
-    const next = { message: announcement.message, active: true }
+  const next = {
+    message,
+    active: true,
+  }
 
-    writeAnnouncement(next)
-    setAnnouncement(next)
-  }, [announcement])
+  writeAnnouncement(next)
+  setAnnouncement(next)
+}, [])
 
   const deactivate = useCallback(() => {
     const next = { ...announcement, active: false }

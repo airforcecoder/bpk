@@ -43,7 +43,7 @@ describe('announcement editor and public notice', () => {
       target: { value: 'We are closed for maintenance' },
     })
     fireEvent.click(screen.getByRole('switch', { name: 'Active' }))
-
+    expect(window.localStorage.getItem('bpk:announcement-demo')).toContain('"active":true')
     expect(screen.getByRole('status', { name: 'Announcement' })).toHaveTextContent(
       'We are closed for maintenance',
     )
@@ -61,6 +61,7 @@ describe('announcement editor and public notice', () => {
       target: { value: 'Temporary closure' },
     })
     fireEvent.click(screen.getByRole('switch', { name: 'Active' }))
+  
     expect(screen.getByRole('status', { name: 'Announcement' })).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('switch', { name: 'Active' }))

@@ -65,15 +65,18 @@ export default function AnnouncementDemoPage() {
           />
         </div>
 
-        <label className="announcement-demo__toggle">
+        <div className="announcement-demo__toggle">
           <input
+            id="announcement-active"
             type="checkbox"
             role="switch"
             checked={announcement.active}
             onChange={(event) => handleToggle(event.target.checked)}
           />
-          <span className="announcement-demo__toggle-label">Active</span>
-        </label>
+          <label htmlFor="announcement-active" className="announcement-demo__toggle-label">
+            Active
+          </label>
+        </div>
 
         <div className="announcement-demo__actions" role="group" aria-label="Announcement actions">
           <button
