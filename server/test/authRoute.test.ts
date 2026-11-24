@@ -158,4 +158,31 @@ describe("POST /api/auth/login", () => {
     response.body.authenticated
   ).toBe(false);
   });
+
+  it("returns 400 for missing body", async () => {
+  const response = await request(app)
+    .post("/api/auth/login");
+
+  expect(response.status).toBe(400);
+  });
+  it("returns 400 for blank credentials", async () => {
+  const response = await request(app)
+    .post("/api/auth/login")
+    .send({
+      usernameOrEmail: "",
+      password: "",
+    });
+
+  expect(response.status).toBe(400);
+  });
+  it("returns 400 for non-string credentials", async () => {
+  const response = await request(app)
+    .post("/api/auth/login")
+    .send({
+      usernameOrEmail: 123,
+      password: true,
+    });
+
+  expect(response.status).toBe(400);
+  });
 });

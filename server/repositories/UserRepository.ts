@@ -48,11 +48,22 @@ export const users: User[] =
       ]
     : [];
 
-export function findByUsername(
-  username: string
+export function findByUsernameorEmail(
+  usernameOrEmail: string
 ): User | undefined {
+  const normalized =
+    usernameOrEmail
+      .trim()
+      .toLowerCase();
+
   return users.find(
-    (user) => user.username === username
+    (user) =>
+      user.username
+        .trim()
+        .toLowerCase() === normalized ||
+      user.email
+        .trim()
+        .toLowerCase() === normalized
   );
 }
 export function shouldCreateDevUser() {

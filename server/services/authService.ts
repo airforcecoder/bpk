@@ -1,5 +1,5 @@
 import {
-  findByUsername,
+  findByUsernameorEmail,
 } from "../repositories/UserRepository";
 import {
   verifyPassword,
@@ -80,7 +80,7 @@ export async function login(
   }
   
   const user =
-    findByUsername(username);
+    findByUsernameorEmail(username);
 
   if (!user) {
     recordFailedAttempt(

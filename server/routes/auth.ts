@@ -8,14 +8,43 @@ router.post(
   "/api/auth/login",
   async (req, res) => {
     try {
-    const { usernameOrEmail, password } = req.body;
+    if (
+  !req.body ||
+  typeof req.body !== "object"
+) {
+  return res.status(400).json({
+    success: false,
+    message:
+      "Request body must be a JSON object.",
+  });
+}
 
-    if (!usernameOrEmail || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Username/email and password are required.",
-      });
-    }
+const {
+  usernameOrEmail,
+  password,
+} = req.body;
+
+    if (
+  typeof usernameOrEmail !== "string" ||
+  typeof password !== "string"
+) {
+  return res.status(400).json({
+    success: false,
+    message:
+      "Username/email and password must be strings.",
+  });
+}
+
+if (
+  !usernameOrEmail.trim() ||
+  !password.trim()
+) {
+  return res.status(400).json({
+    success: false,
+    message:
+      "Username/email and password are required.",
+  });
+}
 
     const result = await login(
       usernameOrEmail,

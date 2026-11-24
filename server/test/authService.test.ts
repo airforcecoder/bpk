@@ -118,4 +118,13 @@ describe("Authentication Service", () => {
       "Too many failed login attempts. Please try again later."
     );
 });
+  it("logs in successfully with email",
+  async () => {
+  const result = await login(
+  process.env.DEV_ADMIN_EMAIL!,
+  process.env.DEV_ADMIN_PASSWORD!
+  );
+  expect(result.success)
+  .toBe(true);
+  });
 });

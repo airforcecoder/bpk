@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { NavLink, useNavigate } from 'react-router'
 import './AdminLayout.css'
 
@@ -21,16 +21,34 @@ type AdminLayoutProps = {
 function AdminLayout({ title, children }: AdminLayoutProps) {
   const navigate = useNavigate()
 
-  async function handleLogout() {
-   try {
-    await fetch("/api/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-  } finally {
+const [error, setError] =useState("");
+
+async function handleLogout() {
+  setError("");
+
+  try {
+    const response =
+      await fetch(
+        "/api/auth/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+    if (!response.ok) {
+      throw new Error(
+        "Logout failed."
+      );
+    }
+
     navigate("/admin/login");
+  } catch {
+    setError(
+      "Unable to log out. Please try again."
+    );
   }
-  }
+}
   return (
     <div className="admin-layout">
       <aside className="admin-layout__sidebar" aria-label="Admin navigation">
@@ -57,6 +75,11 @@ function AdminLayout({ title, children }: AdminLayoutProps) {
         >
           Logout
         </button>
+        {error && (
+          <p role="alert">
+        {error}
+        </p>
+        )}
       </aside>
 
       <section className="admin-layout__content">
