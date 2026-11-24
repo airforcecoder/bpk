@@ -2,9 +2,22 @@ import express, { type ErrorRequestHandler } from 'express'
 import { mockProducts, type Product } from '../../shared/product'
 import { sendError } from './errors'
 import { ProductStore } from './productStore'
+import { ProductStore } from './productStore'
 import { createProductsRouter } from './routes/products'
 import authRouter from '../routes/auth'
 import cookieParser from "cookie-parser";
+
+/* BPK-71: POST/PUT /api/products have no auth yet, so they must never be reachable on a real
+   deployment. They are on unless NODE_ENV is "production". Any host that runs this server for
+   real must set NODE_ENV=production. */
+export function writeRoutesEnabled(env: NodeJS.ProcessEnv = process.env) {
+  return env.NODE_ENV !== 'production'
+}
+
+export interface AppOptions {
+  /* Defaults to writeRoutesEnabled(). Tests pass false/true to check both modes. */
+  enableWriteRoutes?: boolean
+}
 
 /* BPK-71: POST/PUT /api/products have no auth yet, so they must never be reachable on a real
    deployment. They are on unless NODE_ENV is "production". Any host that runs this server for
