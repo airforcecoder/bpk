@@ -65,4 +65,97 @@ describe("POST /api/auth/login", () => {
     expect(response.status).toBe(400);
     expect(response.body.success).toBe(false);
   });
+  it("creates a session on successful login", async () => {
+    const response = await request(app)
+      .post("/api/auth/login")
+      .send({
+    usernameOrEmail: "admin",
+    password: "password123",
+    });
+ 
+    expect(response.status).toBe(200);
+    expect(response.headers["set-cookie"]).toBeDefined();
+  });
+  
+  it("allows access with a valid session", async () => {
+  const loginResponse = await request(app)
+    .post("/api/auth/login")
+    .send({
+      usernameOrEmail: "admin",
+      password: "password123",
+    });
+
+  const cookie =
+    loginResponse.headers["set-cookie"];
+
+  const sessionResponse = await request(app)
+    .get("/api/auth/session")
+    .set("Cookie", cookie);
+
+  expect(sessionResponse.status)
+    .toBe(200);
+
+  expect(
+    sessionResponse.body.authenticated
+  ).toBe(true);
+  });
+
+  it("denies access without a session", async () => {
+  const response = await request(app)
+    .get("/api/auth/session");
+
+  expect(response.status).toBe(401);
+
+  expect(
+    response.body.authenticated
+  ).toBe(false);
+  });
+
+  it("invalidates the session on logout", async () => {
+  const loginResponse = await request(app)
+    .post("/api/auth/login")
+    .send({
+      usernameOrEmail: "admin",
+      password: "password123",
+    });
+
+  const cookie =
+    loginResponse.headers["set-cookie"];
+
+  await request(app)
+    .post("/api/auth/logout")
+    .set("Cookie", cookie);
+
+  const sessionResponse = await request(app)
+    .get("/api/auth/session")
+    .set("Cookie", cookie);
+
+  expect(sessionResponse.status)
+    .toBe(401);
+  });
+
+  it("rejects a session after logout", async () => {
+  const loginResponse = await request(app)
+    .post("/api/auth/login")
+    .send({
+      usernameOrEmail: "admin",
+      password: "password123",
+    });
+
+  const cookie =
+    loginResponse.headers["set-cookie"];
+
+  await request(app)
+    .post("/api/auth/logout")
+    .set("Cookie", cookie);
+
+  const response = await request(app)
+    .get("/api/auth/session")
+    .set("Cookie", cookie);
+
+  expect(response.status).toBe(401);
+  expect(
+    response.body.authenticated
+  ).toBe(false);
+  });
 });

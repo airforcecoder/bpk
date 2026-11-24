@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import type { LoginService } from "../../services/authentication/auth.interface";
-import { loginUser } from "../../services/authentication/authStorage";
 
 import { validateLogin } from "../../utils/loginValidation";
 
@@ -68,7 +67,6 @@ export default function AdminLoginForm({
       setMessage(result.message);
 
       if (result.success) {
-        loginUser();
         navigate("/admin/dashboard");
       }
 
@@ -101,13 +99,7 @@ export default function AdminLoginForm({
         </div>
 
         <div className="demo-notice" role="note">
-            Demonstration only.
-
-        <br />
-
-          Username: <strong>admin</strong>
-        <br />
-          Password: <strong>password123</strong>
+            Administrator access only.
 
         </div>
 
@@ -219,7 +211,7 @@ export default function AdminLoginForm({
 
           {loading && (
             <p className="loading-message" role="status">
-              Processing demonstration login...
+              Signing in...
             </p>
           )}
 

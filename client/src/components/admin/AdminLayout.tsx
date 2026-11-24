@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { NavLink, useNavigate } from 'react-router'
-import { logoutUser } from "../../services/authentication/authStorage";
 import './AdminLayout.css'
 
 type AdminNavItem = {
@@ -22,9 +21,15 @@ type AdminLayoutProps = {
 function AdminLayout({ title, children }: AdminLayoutProps) {
   const navigate = useNavigate()
 
-  function handleLogout() {
-    logoutUser()
-    navigate('/admin/login')
+  async function handleLogout() {
+   try {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+  } finally {
+    navigate("/admin/login");
+  }
   }
   return (
     <div className="admin-layout">

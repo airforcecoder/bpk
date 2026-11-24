@@ -4,6 +4,10 @@ import {
 import {
   verifyPassword,
 } from "./passwordService";
+import crypto from "crypto";
+import {
+  createSession,
+} from "./sessionService";
 
 export async function login(
   username: string,
@@ -34,10 +38,18 @@ export async function login(
     };
   }
 
+  const sessionId =
+  crypto.randomUUID();
+
+  createSession(
+    sessionId,
+    user.id
+  );
+
   return {
     success: true,
-    message:
-      "Login successful.",
+    message: "Login successful.",
+    sessionId,
     userId: user.id,
   };
 }

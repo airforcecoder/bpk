@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { login } from "../services/authService";
+import { removeSession, getSessionUser } from "../services/sessionService";
 
 const router = Router();
 
@@ -25,6 +26,15 @@ router.post(
       return res.status(401).json(result);
     }
 
+    res.cookie(
+      "sessionId",
+      result.sessionId,
+      {
+        httpOnly: true,
+        sameSite: "strict",
+      }
+    );
+
     return res.status(200).json({
       success: true,
       message: "Login successful.",
@@ -36,5 +46,43 @@ router.post(
     });
   }
 }
+);
+
+router.post("/api/auth/logout", (req, res) => {
+  const sessionId = req.cookies?.sessionId;
+
+  if (sessionId) {
+    removeSession(sessionId);
+  }
+
+  res.clearCookie("sessionId");
+
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully.",
+  });
+});
+
+router.get(
+  "/api/auth/session",
+  (req, res) => {
+    const sessionId =
+      req.cookies.sessionId;
+
+    const userId =
+      getSessionUser(sessionId);
+
+    if (!userId) {
+      return res
+        .status(401)
+        .json({
+          authenticated: false,
+        });
+    }
+
+    return res.status(200).json({
+      authenticated: true,
+    });
+  }
 );
 export default router;
