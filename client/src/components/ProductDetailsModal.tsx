@@ -10,6 +10,16 @@ import './ProductDetailsModal.css'
 /*BPK-138: Import product ingredients service */
 import {  getProductIngredients, type ProductIngredientsResult} from '../services/productIngredientsService'
 
+/* BPK-104: I need this to add products to the shared cart. */
+import { useCart } from '../context/CartContext'
+
+/* BPK-106: Use the same price calculations as the cart. */
+import {
+  calculateUnitPrice,
+  calculateLineSubtotal,
+  formatPrice,
+} from '../utils/cartPricing'
+
 /* Product we clicked, and close behavior as a modal */
 type ProductDetailsModalProps = {
     product: Product
@@ -18,6 +28,12 @@ type ProductDetailsModalProps = {
 
 /* Our function to pop up details on page */
 function ProductDetailsModal({product, onClose} : ProductDetailsModalProps){
+
+/* Get the function for adding items to the cart. */
+const { addItem } = useCart()
+
+/* Keep track of whether I should show a confirmation. */
+const [addedToCart, setAddedToCart] = useState(false)
 
 
 /* Modal keyboard accessibility */
@@ -92,20 +108,44 @@ useEffect(() => {
     const [selectedCustomizations, setSelectedCustomizations] =
     useState<string[]>([])
 
-    /* Adding price calculation */
-    const size = product.sizes?.find(
-        (option) => option.name === selectedSize
+    
+    /* BPK-106: Get the price for the selected size
+    and add any paid customizations. */
+    const unitPrice = calculateUnitPrice(
+    product,
+    selectedSize,
+    selectedCustomizations
     )
-        const unitPrice = size?.price ?? product.price
-        const customizationTotal = (product.customizations ?? [])
+
+/* Multiply the unit price by the quantity
+   to show the subtotal in the modal. */
+const subtotal = calculateLineSubtotal(unitPrice, quantity)
+
+
+    /* BPK-104: When Add to Cart is clicked, I take
+   the customer's selections and save them in the cart. */
+    function handleAddToCart() {
+
+    /* Double-check that the product is available. */
+    if (product.availability !== 'available') return
+
+    /* Keep only the customizations the customer selected. */
+    const chosenCustomizations = (product.customizations ?? [])
         .filter((option) => selectedCustomizations.includes(option.id))
-        .reduce((total, option) => total + option.price, 0)
-        const subtotal = (unitPrice + customizationTotal) * quantity
-        const formatPrice = (price: number) => price.toLocaleString('en-US', 
-        {
-        style: 'currency',
-        currency: 'USD'
-        })
+
+    /* BPK-106: Save the selected product and its options.
+   The cart provider now calculates the price. */
+    addItem({
+        product,
+        selectedSize,
+        customizations: chosenCustomizations,
+        notes,
+        quantity,
+    })
+
+  /* Let the customer know the item was added. */
+  setAddedToCart(true)
+}
 
     /* Adding image to the pop up modal */
     const [imageFailed, setImageFailed] = useState(false)
@@ -348,16 +388,26 @@ useEffect(() => {
                         : 'Sold Out'}
                     </p>
 
-                    {/* Cart functionality will be implemented later */}
+                    {/* BPK-104: Enable Add to Cart for available products.
+                        Sold-out products should still have a disabled button. */}
                     <button
                     type="button"
                     className="btn btn-primary product-modal-cart"
-                    disabled
+                    onClick={handleAddToCart}
+                    disabled={product.availability !== 'available'}
                     >
                     {product.availability === 'unavailable'
                         ? 'Sold Out'
                         : 'Add to Cart'}
                     </button>
+
+                    {/* Show a message after the customer adds an item.
+                        This lets them know their click worked. */}
+                    {addedToCart && (
+                    <p role="status">
+                        Added to cart!
+                    </p>
+                    )}
 
                 </section>
         </div>

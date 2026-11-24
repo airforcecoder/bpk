@@ -51,6 +51,8 @@ Product photos are not served by the API. Each product's `imageRef` (for example
 | `GET /api/products/:id` | `200` with one product |
 | `GET /api/products/:id` with a malformed id | `400` `INVALID_PRODUCT_ID` |
 | `GET /api/products/:id` with an id no product has | `404` `PRODUCT_NOT_FOUND` |
+| `POST /api/products` (dev only) | `201` with the created product, see [Writing products](#writing-products-bpk-59-dev-only) |
+| `PUT /api/products/:id` (dev only) | `200` with the updated product |
 | Any other `/api` route | `404` `NOT_FOUND` |
 | Unexpected server error | `500` `INTERNAL_ERROR` |
 
@@ -66,6 +68,97 @@ Every error uses the same JSON shape:
   }
 }
 ```
+
+### Writing products (BPK-59, dev only)
+
+`POST` and `PUT` let you add and edit products while developing, for example to try out the menu with more products. They are a stepping stone to a real admin flow, not that flow yet.
+
+**Changes are in memory only.** The server copies the seed products from `shared/product.ts` into memory when it starts. GET requests read from that copy, so creates and updates show up right away, but they are lost when the server restarts (including when `npm run dev` reloads after you save a file). `shared/product.ts` is never changed.
+
+#### Dev-only gating
+
+There is no authentication yet, so anyone who could reach these endpoints could change the menu. They are only registered when `NODE_ENV` is **not** `production`:
+
+| `NODE_ENV` | POST / PUT |
+|---|---|
+| unset, `development`, `test` | on |
+| `production` | off: they return `404` `NOT_FOUND` like any unknown route |
+
+`npm run dev` doesn't set `NODE_ENV`, so they are on locally. The server logs which mode it is in when it starts. **Any host that runs this server for real must set `NODE_ENV=production`** until authentication exists. The check is `writeRoutesEnabled()` in [`server/src/app.ts`](server/src/app.ts).
+
+#### POST /api/products
+
+Creates a product and returns `201` with the product and a `Location` header such as `/api/products/prod-008`.
+
+```bash
+curl -X POST http://localhost:3001/api/products \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "name": "Strawberry Shortcake",
+    "description": "Vanilla pudding with strawberries and shortcake crumbles.",
+    "price": 10,
+    "imageRef": "/images/strawberry-shortcake.jpg",
+    "availability": "available",
+    "sizes": [{ "name": "Mini (8oz)", "price": 10 }]
+  }'
+```
+
+**Ids:** leave `id` out and the server assigns the next one (one more than the highest `prod-NNN` in use, so `prod-008` with the current seed data). You can send your own `id` instead. It must look like `prod-001` (`400` otherwise) and not already be used (`409` `DUPLICATE_PRODUCT_ID` otherwise).
+
+#### PUT /api/products/:id
+
+Replaces the product with that id and returns `200` with the new version.
+
+**PUT is a full replace, not a partial update.** Send the whole product. Any optional field you leave out (`sizes`, `customizations`, `nutrition`) is removed. To change one field, GET the product, edit it, and PUT it back. `id` in the body is optional, but if you send it, it must match the URL, since ids can't be changed.
+
+```bash
+curl -X PUT http://localhost:3001/api/products/prod-003 \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "name": "Chocolate Oreo Blast",
+    "description": "Chocolate pudding layered with Oreos and bananas.",
+    "price": 9,
+    "imageRef": "/images/chocolate-oreo-blast.jpg",
+    "availability": "available",
+    "sizes": [{ "name": "Mini (8oz)", "price": 9 }, { "name": "Selfie (16oz)", "price": 15 }]
+  }'
+```
+
+#### Validation
+
+Bodies are checked against the `Product` type in `shared/product.ts`:
+
+| Field | Rule |
+|---|---|
+| `name`, `description`, `imageRef` | Required, non-blank strings (trimmed before saving) |
+| `price` | Required number, `0` or more (`"9.00"` as a string is rejected) |
+| `availability` | Required, `"available"` or `"unavailable"` |
+| `id` | Optional, `prod-` followed by digits |
+| `sizes` | Optional array of `{ name, price }` |
+| `customizations` | Optional array of `{ id, name, price }` |
+| `nutrition` | Optional `{ ingredients?: string[], allergens?: string[], status?: "approved" \| "pending" }` |
+
+Unknown fields (at any level) and `null` values are rejected, so a typo like `"prise"` fails instead of being silently dropped. One `400` lists every problem in its message:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid product: name is required; price must not be negative."
+  }
+}
+```
+
+| Status | Code | When |
+|---|---|---|
+| `400` | `VALIDATION_ERROR` | Body is missing, not a JSON object, or breaks a rule above |
+| `400` | `INVALID_JSON` | Body isn't valid JSON |
+| `400` | `INVALID_PRODUCT_ID` | PUT URL id is malformed |
+| `404` | `PRODUCT_NOT_FOUND` | PUT to an id no product has (PUT never creates) |
+| `409` | `DUPLICATE_PRODUCT_ID` | POST with an id that is already used |
+| `413` | `PAYLOAD_TOO_LARGE` | Body is over 100 KB |
+
+PUT checks happen in this order: URL id format (`400`), product exists (`404`), then the body (`400`).
 
 ### Calling the API from the frontend
 
@@ -129,10 +222,13 @@ The import path assumes the file is in `client/src/components/`. For one product
 | File | Purpose |
 |---|---|
 | [`server/src/index.ts`](server/src/index.ts) | Starts the API on port 3001 (override with the `PORT` env variable) |
-| [`server/src/app.ts`](server/src/app.ts) | `createApp()` builds the Express app without starting it, which the tests use |
-| [`server/src/routes/products.ts`](server/src/routes/products.ts) | The two product endpoints |
+| [`server/src/app.ts`](server/src/app.ts) | `createApp()` builds the Express app without starting it, which the tests use. Also has the dev-only `writeRoutesEnabled()` check |
+| [`server/src/routes/products.ts`](server/src/routes/products.ts) | The product endpoints |
+| [`server/src/productStore.ts`](server/src/productStore.ts) | The in-memory product list the endpoints read and write |
+| [`server/src/validateProduct.ts`](server/src/validateProduct.ts) | Validation for POST/PUT bodies |
 | [`server/src/errors.ts`](server/src/errors.ts) | The shared JSON error format |
-| [`server/test/products.test.ts`](server/test/products.test.ts) | Endpoint tests, including the error cases |
+| [`server/test/products.test.ts`](server/test/products.test.ts) | GET endpoint tests, including the error cases |
+| [`server/test/products.write.test.ts`](server/test/products.write.test.ts) | POST/PUT tests. Each test gets a fresh app and store, so they don't depend on order |
 
 ### Where components could switch to the API later
 
@@ -146,6 +242,7 @@ BPK-140 adds the API without changing any existing components. These still use t
 
 ### Known gaps
 
+- **No persistence or auth for writes.** POST/PUT changes live in memory and there is no login, which is why they are dev only (see above). A database and admin authentication are follow-up work.
 - **The live site has no API.** The GitHub Pages deploy only hosts the built frontend, so `/api` doesn't exist there and the Vite proxy is development only. Before production code calls the API, the backend needs a host and the frontend needs that URL (for example an env variable), or a fallback to the mock data.
 - **Missing product images.** Only `og-nilla.jpg` and `margherita-pizza.jpg` exist in `client/public/images/`. The images for prod-003 to prod-006 don't, so those cards show "No image".
 - **Large image.** `margherita-pizza.jpg` is about 10.6 MB and should be resized for use on product cards.
