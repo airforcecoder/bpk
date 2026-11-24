@@ -13,7 +13,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { label: 'Home', path: '/' },
-  { label: 'Order Online', path: '/order' },
+  { label: 'Catering Request', path: '/catering' },
   { label: 'Menu', path: '/menu' },
   { label: 'About', path: '/about' },
   { label: 'Cart', path: '/cart' },
