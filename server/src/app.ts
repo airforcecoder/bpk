@@ -8,10 +8,13 @@ import cookieParser from "cookie-parser";
 import 'dotenv/config';
 
 /* BPK-71: POST/PUT /api/products have no auth yet, so they must never be reachable on a real
-   deployment. They are on unless NODE_ENV is "production". Any host that runs this server for
-   real must set NODE_ENV=production. */
-export function writeRoutesEnabled(env: NodeJS.ProcessEnv = process.env) {
-  return env.NODE_ENV !== 'production'
+   deployment. They are off unless the server is started with --enable-product-writes (which
+   `npm run dev` passes), and NODE_ENV=production turns them off even with the flag.
+   Opt-in so a host that forgets to set NODE_ENV doesn't expose them. */
+export const ENABLE_WRITES_FLAG = '--enable-product-writes'
+
+export function writeRoutesEnabled(env: NodeJS.ProcessEnv = process.env, argv: readonly string[] = process.argv) {
+  return env.NODE_ENV !== 'production' && argv.includes(ENABLE_WRITES_FLAG)
 }
 
 export interface AppOptions {
@@ -50,6 +53,11 @@ export function createApp(products: readonly Product[] = mockProducts, options: 
     }
     if (err?.type === 'entity.too.large') {
       return sendError(res, 413, 'PAYLOAD_TOO_LARGE', 'Request body is too large.')
+    }
+    /* Any other client error from body-parser (unsupported charset or encoding, etc.).
+       expose=true means the message is safe to send back. */
+    if (err?.expose === true && Number.isInteger(err.status) && err.status >= 400 && err.status < 500) {
+      return sendError(res, err.status, 'BAD_REQUEST', String(err.message))
     }
     console.error(err)
     return sendError(res, 500, 'INTERNAL_ERROR', 'Something went wrong on the server.')

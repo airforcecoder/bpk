@@ -121,14 +121,15 @@ Every error uses the same JSON shape:
 
 #### Dev-only gating
 
-There is no authentication yet, so anyone who could reach these endpoints could change the menu. They are only registered when `NODE_ENV` is **not** `production`:
+There is no authentication yet, so anyone who could reach these endpoints could change the menu. They are **off by default** and only registered when the server is started with `--enable-product-writes` and `NODE_ENV` is not `production`:
 
-| `NODE_ENV` | POST / PUT |
+| Started with | POST / PUT |
 |---|---|
-| unset, `development`, `test` | on |
-| `production` | off: they return `404` `NOT_FOUND` like any unknown route |
+| `npm run dev` (passes `--enable-product-writes`) | on |
+| `npm start`, or anything without the flag | off: they return `404` `NOT_FOUND` like any unknown route |
+| `NODE_ENV=production`, with or without the flag | off |
 
-`npm run dev` doesn't set `NODE_ENV`, so they are on locally. The server logs which mode it is in when it starts. **Any host that runs this server for real must set `NODE_ENV=production`** until authentication exists. The check is `writeRoutesEnabled()` in [`server/src/app.ts`](server/src/app.ts).
+Because they are opt-in, a host that forgets to set `NODE_ENV` still doesn't expose them. The server logs which mode it is in when it starts. The check is `writeRoutesEnabled()` in [`server/src/app.ts`](server/src/app.ts).
 
 #### POST /api/products
 
@@ -201,6 +202,7 @@ Unknown fields (at any level) and `null` values are rejected, so a typo like `"p
 | `404` | `PRODUCT_NOT_FOUND` | PUT to an id no product has (PUT never creates) |
 | `409` | `DUPLICATE_PRODUCT_ID` | POST with an id that is already used |
 | `413` | `PAYLOAD_TOO_LARGE` | Body is over 100 KB |
+| `415` (or other `4xx`) | `BAD_REQUEST` | Body can't be read, for example an unsupported charset or `Content-Encoding` |
 
 PUT checks happen in this order: URL id format (`400`), product exists (`404`), then the body (`400`).
 
