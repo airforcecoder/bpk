@@ -1,3 +1,14 @@
+process.env.NODE_ENV = "test";
+
+process.env.DEV_ADMIN_USERNAME =
+  "test-admin";
+
+process.env.DEV_ADMIN_EMAIL =
+  "test-admin@example.com";
+
+process.env.DEV_ADMIN_PASSWORD =
+  "test-password";
+
 import { describe, expect, it } from "vitest";
 import request from "supertest";
 import { createApp } from "../src/app";
@@ -9,8 +20,8 @@ describe("POST /api/auth/login", () => {
     const response = await request(app)
       .post("/api/auth/login")
       .send({
-        usernameOrEmail: "admin",
-        password: "password123",
+        usernameOrEmail: process.env.DEV_ADMIN_USERNAME!,
+        password: process.env.DEV_ADMIN_PASSWORD!,
       });
 
     expect(response.status).toBe(200);
@@ -24,7 +35,7 @@ describe("POST /api/auth/login", () => {
     const response = await request(app)
       .post("/api/auth/login")
       .send({
-        usernameOrEmail: "admin",
+        usernameOrEmail: process.env.DEV_ADMIN_USERNAME!,
         password: "wrongpassword",
       });
 
@@ -37,7 +48,7 @@ describe("POST /api/auth/login", () => {
       .post("/api/auth/login")
       .send({
         usernameOrEmail: "not-admin",
-        password: "password123",
+        password: process.env.DEV_ADMIN_PASSWORD!,
       });
 
     expect(response.status).toBe(401);
@@ -48,7 +59,7 @@ describe("POST /api/auth/login", () => {
     const response = await request(app)
       .post("/api/auth/login")
       .send({
-        password: "password123",
+        password: process.env.DEV_ADMIN_PASSWORD!,
       });
 
     expect(response.status).toBe(400);
@@ -59,7 +70,7 @@ describe("POST /api/auth/login", () => {
     const response = await request(app)
       .post("/api/auth/login")
       .send({
-        usernameOrEmail: "admin",
+        usernameOrEmail: process.env.DEV_ADMIN_USERNAME!,
       });
 
     expect(response.status).toBe(400);
@@ -69,8 +80,8 @@ describe("POST /api/auth/login", () => {
     const response = await request(app)
       .post("/api/auth/login")
       .send({
-    usernameOrEmail: "admin",
-    password: "password123",
+    usernameOrEmail: process.env.DEV_ADMIN_USERNAME!,
+    password: process.env.DEV_ADMIN_PASSWORD!,
     });
  
     expect(response.status).toBe(200);
@@ -81,8 +92,8 @@ describe("POST /api/auth/login", () => {
   const loginResponse = await request(app)
     .post("/api/auth/login")
     .send({
-      usernameOrEmail: "admin",
-      password: "password123",
+      usernameOrEmail: process.env.DEV_ADMIN_USERNAME!,
+      password: process.env.DEV_ADMIN_PASSWORD!,
     });
 
   const cookie =
@@ -115,8 +126,8 @@ describe("POST /api/auth/login", () => {
   const loginResponse = await request(app)
     .post("/api/auth/login")
     .send({
-      usernameOrEmail: "admin",
-      password: "password123",
+      usernameOrEmail: process.env.DEV_ADMIN_USERNAME!,
+      password: process.env.DEV_ADMIN_PASSWORD!,
     });
 
   const cookie =
@@ -138,8 +149,8 @@ describe("POST /api/auth/login", () => {
   const loginResponse = await request(app)
     .post("/api/auth/login")
     .send({
-      usernameOrEmail: "admin",
-      password: "password123",
+      usernameOrEmail: process.env.DEV_ADMIN_USERNAME!,
+      password: process.env.DEV_ADMIN_PASSWORD!,
     });
 
   const cookie =

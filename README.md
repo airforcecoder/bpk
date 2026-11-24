@@ -37,6 +37,50 @@ Other root scripts:
 | `npm run build` | Builds the frontend into `client/dist` |
 | `npm run lint` | Lints the frontend |
 
+## Development Authentication (BPK-86)
+ Copy the example configuration file:
+
+  `cp server/.env.example server/.env`
+  Update server/.env with local development credentials:
+
+  NODE_ENV=development
+ 
+  DEV_ADMIN_USERNAME=admin
+  DEV_ADMIN_EMAIL=admin@example.com
+  DEV_ADMIN_PASSWORD=password123
+  Development Administrator Account
+
+  The administrator account is intended for local development only.
+
+  A demo administrator account is created only when:
+
+  `NODE_ENV=development`
+
+No demo administrator account is created in production.
+
+Administrator credentials are loaded from environment variables rather than being stored in source code.
+
+Authentication Endpoints
+Endpoint	            Purpose
+POST /api/auth/login	Authenticates an administrator and creates a session
+GET /api/auth/session	Validates the current session
+POST /api/auth/logout	Invalidates the current session
+
+Successful login creates a server-side session and stores the session identifier in an HttpOnly cookie.
+
+Authentication Tests
+
+The authentication test suite verifies:
+
+Successful login
+Invalid credentials
+Session creation
+Session validation
+Session expiration
+Logout/session invalidation
+Administrator authorization checks
+Development-only account restrictions
+
 ## Product API (BPK-140)
 
 Product data lives in one place: [`shared/product.ts`](shared/product.ts). It defines the `Product` type and the seed products. The API serves it, and the frontend's existing `client/src/data/mockProducts.ts` re-exports it, so editing that one file updates both.
@@ -242,7 +286,8 @@ BPK-140 adds the API without changing any existing components. These still use t
 
 ### Known gaps
 
-- **No persistence or auth for writes.** POST/PUT changes live in memory and there is no login, which is why they are dev only (see above). A database and admin authentication are follow-up work.
+- **No persistence or auth for writes.** POST/PUT changes live in memory and are lost when the server restarts.
+- **Authentication is development-focused.** The current administrator authentication implementation uses a development-only demo account and in-memory session storage. A database-backed identity system is future work.
 - **The live site has no API.** The GitHub Pages deploy only hosts the built frontend, so `/api` doesn't exist there and the Vite proxy is development only. Before production code calls the API, the backend needs a host and the frontend needs that URL (for example an env variable), or a fallback to the mock data.
 - **Missing product images.** Only `og-nilla.jpg` and `margherita-pizza.jpg` exist in `client/public/images/`. The images for prod-003 to prod-006 don't, so those cards show "No image".
 - **Large image.** `margherita-pizza.jpg` is about 10.6 MB and should be resized for use on product cards.

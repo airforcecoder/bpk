@@ -1,13 +1,14 @@
-import { describe, expect, it } from "vitest";
+import {beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createSession,
   getSessionUser,
   removeSession,
 } from "../services/sessionService";
-import type { Session }
-from "../models/Session";
 
 describe("Session Service", () => {
+  beforeEach(() => {
+    vi.useRealTimers();
+  });
   it("creates a session", () => {
     createSession("test-session", 1);
 
@@ -27,23 +28,18 @@ describe("Session Service", () => {
   });
   
   it("rejects expired sessions", () => {
-  const sessionId =
-    "expired-session";
+    vi.useFakeTimers();
+    createSession(
+      "expired-session",
+      1
+    );
 
-  const sessions =
-    new Map<string, Session>();
-
-  sessions.set(sessionId, {
-    id: sessionId,
-    userId: 1,
-    createdAt: new Date(),
-    expiresAt: new Date(
-      Date.now() - 1000
-    ),
-  });
+    vi.advanceTimersByTime(
+      1000 * 60 * 60 + 1
+    );
 
   expect(
-    getSessionUser(sessionId)
+    getSessionUser("expired-session")
   ).toBeUndefined();
   });
 });

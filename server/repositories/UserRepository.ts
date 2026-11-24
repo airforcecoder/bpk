@@ -55,3 +55,6 @@ export function findByUsername(
     (user) => user.username === username
   );
 }
+export function shouldCreateDevUser() {
+  return process.env.NODE_ENV === "development";
+}

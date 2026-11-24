@@ -3,19 +3,35 @@ import {
   expect,
   it,
 } from "vitest";
+import {
+  shouldCreateDevUser,
+} from "../repositories/UserRepository";
+
 
 describe(
   "Development Credentials",
   () => {
     it(
-      "does not create demo users in production",
+      "disables demo users in production",
       () => {
         process.env.NODE_ENV =
           "production";
 
         expect(
-          process.env.NODE_ENV
-        ).toBe("production");
+          shouldCreateDevUser()
+        ).toBe(false);
+      }
+    );
+
+    it(
+      "allows demo users in development",
+      () => {
+        process.env.NODE_ENV =
+          "development";
+
+        expect(
+          shouldCreateDevUser()
+        ).toBe(true);
       }
     );
   }

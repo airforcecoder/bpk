@@ -1,3 +1,14 @@
+process.env.NODE_ENV = "test";
+
+process.env.DEV_ADMIN_USERNAME =
+  "test-admin";
+
+process.env.DEV_ADMIN_EMAIL =
+  "test-admin@example.com";
+
+process.env.DEV_ADMIN_PASSWORD =
+  "test-password";
+  
 import { describe, expect, it } from "vitest";
 import { login } from "../services/authService";
 import { users } from "../repositories/UserRepository";
@@ -6,8 +17,8 @@ import { hashPassword } from "../services/passwordService";
 describe("Authentication Service", () => {
   it("logs in successfully with valid credentials", async () => {
     const result = await login(
-      "admin",
-      "password123"
+      process.env.DEV_ADMIN_USERNAME!,
+      process.env.DEV_ADMIN_PASSWORD!
     );
 
     expect(result.success).toBe(true);
@@ -19,7 +30,7 @@ describe("Authentication Service", () => {
   it("rejects an invalid username", async () => {
     const result = await login(
       "fakeuser",
-      "password123"
+      process.env.DEV_ADMIN_PASSWORD!
     );
 
     expect(result.success).toBe(false);
@@ -30,7 +41,7 @@ describe("Authentication Service", () => {
 
   it("rejects an invalid password", async () => {
     const result = await login(
-      "admin",
+      process.env.DEV_ADMIN_USERNAME!,
       "wrongpassword"
     );
 
