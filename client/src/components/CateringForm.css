@@ -125,4 +125,26 @@
   .catering-form__summary-row dt {
     flex: none;
   }
+
+  .catering-form__error-summary {
+  background: #fdecea;
+  color: #7a0016;
+  border: 3px solid #b00020;
+  border-radius: var(--radius-med);
+  padding: var(--space-sm) var(--space-med);
+  margin: 0 0 var(--space-med);
+  font-weight: 700;
+}
+
+.catering-form__error {
+  color: #b00020;
+  font-weight: 700;
+  margin: 0;
+}
+
+.catering-form__field input[aria-invalid='true'],
+.catering-form__field textarea[aria-invalid='true'] {
+  border-color: #b00020;
+  border-width: 3px;
+}
 }
