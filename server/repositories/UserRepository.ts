@@ -2,9 +2,10 @@ import type { User } from "../models/User";
 import { hashPassword } from "../services/passwordService";
 import "dotenv/config";
 
-const IS_DEVELOPMENT =
-  process.env.NODE_ENV !== "production";
-
+const ALLOW_DEV_ACCOUNT =
+  process.env.NODE_ENV === "development"||
+  process.env.NODE_ENV === "test";
+  
 const DEV_ADMIN_USERNAME =
   process.env.DEV_ADMIN_USERNAME;
 
@@ -14,22 +15,8 @@ const DEV_ADMIN_EMAIL =
 const DEV_ADMIN_PASSWORD =
   process.env.DEV_ADMIN_PASSWORD;
 
-console.log("NODE_ENV =", process.env.NODE_ENV);
-console.log(
-  "DEV_ADMIN_USERNAME =",
-  process.env.DEV_ADMIN_USERNAME
-);
-console.log(
-  "DEV_ADMIN_EMAIL =",
-  process.env.DEV_ADMIN_EMAIL
-);
-console.log(
-  "DEV_ADMIN_PASSWORD =",
-  process.env.DEV_ADMIN_PASSWORD
-);
-
 if (
-  IS_DEVELOPMENT &&
+  ALLOW_DEV_ACCOUNT &&
   (
     !DEV_ADMIN_USERNAME ||
     !DEV_ADMIN_EMAIL ||
@@ -42,7 +29,7 @@ if (
 }
 
 export const users: User[] =
-  IS_DEVELOPMENT &&
+  ALLOW_DEV_ACCOUNT &&
   DEV_ADMIN_USERNAME &&
   DEV_ADMIN_EMAIL &&
   DEV_ADMIN_PASSWORD
