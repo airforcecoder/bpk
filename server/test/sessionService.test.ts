@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it, vi } from "vitest";
+import {afterEach, describe, expect, it, vi } from "vitest";
 import {
   createSession,
   getSessionUser,
@@ -6,7 +6,7 @@ import {
 } from "../services/sessionService";
 
 describe("Session Service", () => {
-  beforeEach(() => {
+  afterEach(() => {
     vi.useRealTimers();
   });
   it("creates a session", () => {

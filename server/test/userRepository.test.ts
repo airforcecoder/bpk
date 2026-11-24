@@ -1,38 +1,46 @@
-import {
-  describe,
-  expect,
-  it,
-} from "vitest";
-import {
-  shouldCreateDevUser,
-} from "../repositories/UserRepository";
+import {afterEach,describe,expect,it,vi,} from "vitest";
 
+describe("User Repository",() => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+  it("does not create demo users in production",async () => {
+  vi.stubEnv(
+  "NODE_ENV",
+  "production"
+  );
+  vi.resetModules();
 
-describe(
-  "Development Credentials",
-  () => {
-    it(
-      "disables demo users in production",
-      () => {
-        process.env.NODE_ENV =
-          "production";
+  const module = await import("../repositories/UserRepository");
+  expect(module.users).toEqual([]);
+});
+it("creates a demo user in development",async () => {
+  vi.stubEnv(
+  "NODE_ENV",
+  "development"
+  );
+  vi.stubEnv(
+  "DEV_ADMIN_USERNAME",
+  "test-admin"
+  );
+  vi.stubEnv(
+  "DEV_ADMIN_EMAIL",
+  "test@test.com"
+  );
+  vi.stubEnv(
+  "DEV_ADMIN_PASSWORD",
+  "password123"
+  );
+  vi.resetModules();
 
-        expect(
-          shouldCreateDevUser()
-        ).toBe(false);
-      }
-    );
+  const module =
+  await import("../repositories/UserRepository");
 
-    it(
-      "allows demo users in development",
-      () => {
-        process.env.NODE_ENV =
-          "development";
-
-        expect(
-          shouldCreateDevUser()
-        ).toBe(true);
-      }
-    );
-  }
-);
+  expect(
+  module.users.length).toBe(1);
+  expect(
+  module.users[0].username
+  ).toBe("test-admin");
+  });
+});

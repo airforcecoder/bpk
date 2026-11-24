@@ -146,3 +146,6 @@ export async function login(
     userId: user.id,
   };
 }
+export function clearLoginAttempts() {
+  loginAttempts.clear();
+}

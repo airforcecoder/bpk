@@ -1,20 +1,12 @@
-process.env.NODE_ENV = "test";
-
-process.env.DEV_ADMIN_USERNAME =
-  "test-admin";
-
-process.env.DEV_ADMIN_EMAIL =
-  "test-admin@example.com";
-
-process.env.DEV_ADMIN_PASSWORD =
-  "test-password";
-  
-import { describe, expect, it } from "vitest";
-import { login } from "../services/authService";
+import { beforeEach, describe, expect, it } from "vitest";
+import { login, clearLoginAttempts } from "../services/authService";
 import { users } from "../repositories/UserRepository";
 import { hashPassword } from "../services/passwordService";
 
 describe("Authentication Service", () => {
+  beforeEach(() => {
+    clearLoginAttempts();
+  });
   it("logs in successfully with valid credentials", async () => {
     const result = await login(
       process.env.DEV_ADMIN_USERNAME!,
@@ -57,7 +49,7 @@ describe("Authentication Service", () => {
     username: "inactive",
     email: "inactive@test.com",
     passwordHash: await hashPassword(
-      "password123"
+      process.env.DEV_ADMIN_PASSWORD!
     ),
     role: "ADMIN" as const,
     isActive: false,
@@ -68,7 +60,7 @@ describe("Authentication Service", () => {
 
   const result = await login(
     "inactive",
-    "password123"
+    process.env.DEV_ADMIN_PASSWORD!
   );
 
   expect(result.success)
@@ -83,7 +75,7 @@ describe("Authentication Service", () => {
     username: "standard",
     email: "user@test.com",
     passwordHash: await hashPassword(
-      "password123"
+      process.env.DEV_ADMIN_PASSWORD!
     ),
     role: "USER" as const,
     isActive: true,
@@ -94,7 +86,7 @@ describe("Authentication Service", () => {
 
   const result = await login(
     "standard",
-    "password123"
+    process.env.DEV_ADMIN_PASSWORD!
   );
 
   expect(result.success)
@@ -108,13 +100,13 @@ describe("Authentication Service", () => {
   it("rate limits repeated failed logins", async () => {
   for (let i = 0; i < 5; i++) {
     await login(
-      "admin",
+      process.env.DEV_ADMIN_USERNAME!,
       "wrongpassword"
     );
   }
 
   const result = await login(
-    "admin",
+    process.env.DEV_ADMIN_USERNAME!,
     "wrongpassword"
   );
 

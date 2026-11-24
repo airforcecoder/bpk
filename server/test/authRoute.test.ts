@@ -1,14 +1,3 @@
-process.env.NODE_ENV = "test";
-
-process.env.DEV_ADMIN_USERNAME =
-  "test-admin";
-
-process.env.DEV_ADMIN_EMAIL =
-  "test-admin@example.com";
-
-process.env.DEV_ADMIN_PASSWORD =
-  "test-password";
-
 import { describe, expect, it } from "vitest";
 import request from "supertest";
 import { createApp } from "../src/app";

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts --enable-product-writes",
     "start": "tsx src/index.ts",
-    "test": "vitest run",
+    "test": "node --env-file=.env.test ./node_modules/vitest/vitest.mjs run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
