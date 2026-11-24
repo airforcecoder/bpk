@@ -1,0 +1,26 @@
+/* BPK-68: announcement / closure notice, directly under the Navbar.
+   Distinct from the black/yellow PromoBanner marquee on the Home page. */
+.announcement-notice {
+  background: var(--color-orange);
+  color: var(--color-black);
+  border-bottom: 3px solid var(--color-black);
+}
+
+.announcement-notice__text {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-sm) var(--page-padding);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.4;
+  /* keep line breaks typed in the editor; long words wrap instead of overflowing */
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .announcement-notice__text {
+    font-size: 0.9rem;
+  }
+}
