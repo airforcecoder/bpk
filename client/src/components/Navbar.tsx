@@ -2,6 +2,10 @@ import { useState } from 'react'
 import { NavLink } from 'react-router'
 import './Navbar.css'
 
+/* BPK-107: I need the cart items to show
+   the current quantity in the navbar. */
+import { useCart } from '../context/CartContext'
+
 type NavItem = {
   label: string
   path: string
@@ -17,6 +21,18 @@ const navItems: NavItem[] = [
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+
+    /* BPK-107: Get the items from the shared cart. */
+  const { items } = useCart()
+
+  /* Add up the quantities of every item.
+    I want the total number of puddings, not just
+    the number of different products. */
+  const cartQuantity = items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  )
+
 
   return (
     <header className="navbar">
@@ -46,7 +62,10 @@ function Navbar() {
               }
               onClick={() => setIsOpen(false)}
             >
+              {/* BPK-107: Show the total quantity next to Cart.
+               The count updates whenever the shared cart changes. */}
               {item.label}
+              {item.path === '/cart' && ` (${cartQuantity})`}
             </NavLink>
           ))}
         </nav>
