@@ -16,33 +16,28 @@ import AdminLoginPage from './pages/AdminLoginPage'
    share the cart between all the pages. */
 import { CartProvider } from './context/CartProvider'
 
-/* BPK-104: Import the cart provider so I can
-   share the cart between all the pages. */
-import { CartProvider } from './context/CartProvider'
-
 function App() {
   return (
     <CartProvider>
-      <CartProvider>
       <HashRouter>
-          <Routes>
-            <Route element={<PublicLayout />}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/menu" element={<MenuPage />} />
-              <Route path="/order" element={<OrderPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/admin/login" element={<AdminLoginPage />}/>
-            </Route>
+        <Routes>
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/menu" element={<MenuPage />} />
+            <Route path="/order" element={<OrderPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/admin/login" element={<AdminLoginPage />}/>
+          </Route>
 
-            <Route path="/ui-test" element={<UITestPage />} />
-            <Route path="/admin/dashboard" element={
-          <ProtectedRoute>
-            <AdminDashboardPage />
-          </ProtectedRoute>} />
-          </Routes>
-        </HashRouter>
-    </CartProvider>
+          <Route path="/ui-test" element={<UITestPage />} />
+          <Route path="/admin/dashboard" element={
+            <ProtectedRoute>
+              <AdminDashboardPage />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </HashRouter>
     </CartProvider>
   )
 }
