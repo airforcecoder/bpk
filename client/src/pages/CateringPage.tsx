@@ -1,4 +1,5 @@
 import './CateringPage.css'
+import CateringForm from '../components/CateringForm'
 
 function CateringPage() {
   return (
@@ -15,7 +16,7 @@ function CateringPage() {
         yet. No request can be submitted to Banana Pudding Krazy at this time.
       </p>
 
-      {/* BPK-133: the catering form goes here. */}
+      <CateringForm />
     </main>
   )
 }
