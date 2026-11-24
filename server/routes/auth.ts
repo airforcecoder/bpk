@@ -63,11 +63,15 @@ router.post("/api/auth/logout", (req, res) => {
   });
 });
 
-router.get(
-  "/api/auth/session",
+router.get("/api/auth/session",
   (req, res) => {
     const sessionId =
-      req.cookies.sessionId;
+      req.cookies?.sessionId;
+    if (!sessionId) {
+      return res.status(401).json({
+        authenticated: false,
+      });
+    }
 
     const userId =
       getSessionUser(sessionId);

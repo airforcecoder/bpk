@@ -5,6 +5,7 @@ import { ProductStore } from './productStore'
 import { createProductsRouter } from './routes/products'
 import authRouter from '../routes/auth'
 import cookieParser from "cookie-parser";
+import 'dotenv/config';
 
 /* BPK-71: POST/PUT /api/products have no auth yet, so they must never be reachable on a real
    deployment. They are on unless NODE_ENV is "production". Any host that runs this server for
