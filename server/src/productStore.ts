@@ -25,11 +25,14 @@ export class ProductStore {
 
   /* Next id in the "prod-001" style: one more than the highest number in use, at least 3 digits */
   nextId(): string {
+    /* BigInt so ids with more digits than a JS number can hold still count up correctly */
     const highest = this.items.reduce((max, item) => {
       const match = /^prod-(\d+)$/.exec(item.id)
-      return match ? Math.max(max, Number(match[1])) : max
-    }, 0)
-    return `prod-${String(highest + 1).padStart(3, '0')}`
+      if (!match) return max
+      const n = BigInt(match[1])
+      return n > max ? n : max
+    }, 0n)
+    return `prod-${String(highest + 1n).padStart(3, '0')}`
   }
 
   /* Callers check has() first, the route turns a duplicate into a 409 */

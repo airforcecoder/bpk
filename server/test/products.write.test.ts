@@ -1,7 +1,8 @@
 import request from 'supertest'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockProducts, type Product } from '../../shared/product'
-import { createApp, writeRoutesEnabled } from '../src/app'
+import { createApp, ENABLE_WRITES_FLAG, writeRoutesEnabled } from '../src/app'
+import { ProductStore } from '../src/productStore'
 
 /* BPK-75: Tests for POST/PUT /api/products (BPK-71).
    beforeEach builds a new app, and every app has its own in-memory store copied from the seed
@@ -323,11 +324,21 @@ describe('dev-only gating', () => {
     vi.unstubAllEnvs()
   })
 
-  it('turns write routes off only when NODE_ENV is production', () => {
-    expect(writeRoutesEnabled({ NODE_ENV: 'production' })).toBe(false)
-    expect(writeRoutesEnabled({ NODE_ENV: 'development' })).toBe(true)
-    expect(writeRoutesEnabled({ NODE_ENV: 'test' })).toBe(true)
-    expect(writeRoutesEnabled({})).toBe(true)
+  it('turns write routes on only with the flag, and never when NODE_ENV is production', () => {
+    const withFlag = ['node', 'index.ts', ENABLE_WRITES_FLAG]
+    const noFlag = ['node', 'index.ts']
+    expect(writeRoutesEnabled({}, withFlag)).toBe(true)
+    expect(writeRoutesEnabled({ NODE_ENV: 'development' }, withFlag)).toBe(true)
+    expect(writeRoutesEnabled({ NODE_ENV: 'production' }, withFlag)).toBe(false)
+    /* A host that forgets NODE_ENV is still safe */
+    expect(writeRoutesEnabled({}, noFlag)).toBe(false)
+    expect(writeRoutesEnabled({ NODE_ENV: 'staging' }, noFlag)).toBe(false)
+  })
+
+  it('does not register POST or PUT by default', async () => {
+    const defaultApp = createApp()
+    expectJsonError(await request(defaultApp).post('/api/products').send(validBody()), 404, 'NOT_FOUND')
+    expectJsonError(await request(defaultApp).put('/api/products/prod-001').send(validBody()), 404, 'NOT_FOUND')
   })
 
   it('does not register POST or PUT when NODE_ENV is production', async () => {
@@ -348,5 +359,44 @@ describe('dev-only gating', () => {
 
     expectJsonError(await request(readOnlyApp).post('/api/products').send(validBody()), 404, 'NOT_FOUND')
     expectJsonError(await request(readOnlyApp).put('/api/products/prod-001').send(validBody()), 404, 'NOT_FOUND')
+  })
+})
+
+describe('review fixes', () => {
+  it('keeps counting ids past what a JS number can hold', () => {
+    const base = { name: 'a', description: 'b', price: 1, imageRef: 'c', availability: 'available' as const }
+    const store = new ProductStore([{ ...base, id: 'prod-99999999999999999999' }])
+    expect(store.nextId()).toBe('prod-100000000000000000000')
+    store.add({ ...base, id: store.nextId() })
+    expect(store.nextId()).toBe('prod-100000000000000000001')
+    expect(new ProductStore([{ ...base, id: 'prod-9999999999999999999999' }]).nextId()).toBe(
+      'prod-10000000000000000000000',
+    )
+  })
+
+  it('auto-assigns a new id after a POST with a very large id', async () => {
+    await request(app).post('/api/products').send(validBody({ id: 'prod-99999999999999999999' }))
+    const first = await request(app).post('/api/products').send(validBody())
+    const second = await request(app).post('/api/products').send(validBody())
+    expect(first.status).toBe(201)
+    expect(second.status).toBe(201)
+    expect(second.body.id).not.toBe(first.body.id)
+  })
+
+  it('returns 415 JSON, not 500, for an unsupported charset', async () => {
+    const res = await request(app)
+      .post('/api/products')
+      .set('Content-Type', 'application/json; charset=klingon')
+      .send(JSON.stringify(validBody()))
+    expectJsonError(res, 415, 'BAD_REQUEST')
+  })
+
+  it('returns 415 JSON, not 500, for an unsupported content encoding', async () => {
+    const res = await request(app)
+      .post('/api/products')
+      .set('Content-Type', 'application/json')
+      .set('Content-Encoding', 'nope')
+      .send(JSON.stringify(validBody()))
+    expectJsonError(res, 415, 'BAD_REQUEST')
   })
 })
