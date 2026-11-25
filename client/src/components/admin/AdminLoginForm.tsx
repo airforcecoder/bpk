@@ -70,11 +70,16 @@ export default function AdminLoginForm({
         navigate("/admin/dashboard");
       }
 
-    } catch {
-      setSuccess(false);
-      setMessage(
-        "Unable to process the demonstration login. Please try again."
-      );
+    } catch (error) {
+  setSuccess(false);
+
+  if (error instanceof Error) {
+    setMessage(error.message);
+  } else {
+    setMessage(
+      "Authentication service is currently unavailable. Please try again later."
+    );
+  }
     } finally {
       setLoading(false);
       setPassword("");
@@ -94,17 +99,8 @@ export default function AdminLoginForm({
         </div>
 
         <div className="demo-notice" role="note">
-            Demonstration only.
+            Administrator access only.
 
-        <br />
-
-          Username: <strong>admin</strong>
-        <br />
-          Password: <strong>password123</strong>
-
-        <br /><br />
-
-          No real authentication or administrator access is provided.
         </div>
 
         <form onSubmit={handleSubmit} noValidate>
@@ -215,7 +211,7 @@ export default function AdminLoginForm({
 
           {loading && (
             <p className="loading-message" role="status">
-              Processing demonstration login...
+              Signing in...
             </p>
           )}
 
@@ -234,12 +230,6 @@ export default function AdminLoginForm({
 
         </form>
 
-        <footer className="admin-login-footer">
-          <p>
-            Admin authentication will be implemented
-            in Sprint 4 (BPK-86).
-          </p>
-        </footer>
 
       </div>
     </section>

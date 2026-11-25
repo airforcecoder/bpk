@@ -11,6 +11,10 @@
     "lint": "npm --prefix client run lint"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "concurrently": "^10.0.7"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0"
   }
 }

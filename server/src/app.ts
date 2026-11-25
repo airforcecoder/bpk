@@ -3,6 +3,9 @@ import { mockProducts, type Product } from '../../shared/product'
 import { sendError } from './errors'
 import { ProductStore } from './productStore'
 import { createProductsRouter } from './routes/products'
+import authRouter from '../routes/auth'
+import cookieParser from "cookie-parser";
+import 'dotenv/config';
 
 /* BPK-71: POST/PUT /api/products have no auth yet, so they must never be reachable on a real
    deployment. They are off unless the server is started with --enable-product-writes (which
@@ -30,7 +33,12 @@ export function createApp(products: readonly Product[] = mockProducts, options: 
 
   app.disable('x-powered-by')
 
+  app.use(express.json());
+  app.use(cookieParser());
+
   app.use('/api/products', createProductsRouter(store, { enableWriteRoutes }))
+
+  app.use(authRouter);
 
   /* Any other /api route gets a JSON 404 instead of Express's HTML page */
   app.use('/api', (req, res) => {
