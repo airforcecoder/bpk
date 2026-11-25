@@ -1,0 +1,22 @@
+.catering-page {
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-xxl);
+}
+
+.catering-page__title {
+  font-family: var(--font-display);
+  margin: 0 0 var(--space-med);
+}
+
+.catering-page__intro {
+  margin: 0 0 var(--space-lg);
+}
+
+.catering-page__demo-note {
+  background: var(--color-yellow);
+  color: var(--color-black);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-lg);
+  padding: var(--space-med);
+  margin: 0 0 var(--space-lg);
+}

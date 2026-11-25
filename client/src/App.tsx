@@ -9,6 +9,7 @@ import MenuPage from './pages/MenuPage'
 import OrderPage from './pages/OrderPage'
 import CartPage from './pages/CartPage'
 import AboutPage from './pages/AboutPage'
+import CateringPage from './pages/CateringPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 
@@ -31,6 +32,7 @@ function App() {
               <Route path="/order" element={<OrderPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/catering" element={<CateringPage />} />
               <Route path="/admin/login" element={<AdminLoginPage />} />
               <Route path="/announcement-demo" element={<AnnouncementDemoPage />} />
             </Route>
